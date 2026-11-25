@@ -36,7 +36,7 @@ Columns:
 | Entry cost | The printed entry cost, when the KID has one. |
 | Exit cost | The printed exit cost, when the KID has one. |
 
-The exact ongoing-cost label is copied from two real KIDs during M1 and recorded in `STATUS.md`. Until then the column key `ongoing_charge` is only a placeholder. After that label is recorded, replace the key in the sheet, the router's `comparison_field`, and `GET /compare` in one edit, before any response model is written. There is no alias.
+The two printed ongoing-cost rows are in `STATUS.md`. They do not share one wording. The column key is `ongoing_charge`, chosen 2026-11-25. There is no alias.
 
 Each cell is one of three states:
 
@@ -93,7 +93,7 @@ Returns the stored `sheet.json` document. No model call and no trace.
 }
 ```
 
-`isin` is the row key. The cell keys are `product`, `sri`, `holding_period`, `ongoing_charge`, `entry_cost`, and `exit_cost`. `ongoing_charge` is the placeholder key from the fact-sheet section.
+`isin` is the row key. The cell keys are `product`, `sri`, `holding_period`, `ongoing_charge`, `entry_cost`, and `exit_cost`.
 
 `stated` has `quote` and `citation`. The citation `quote` is the same string as the cell `quote`. The numeric columns are `sri`, `holding_period`, `ongoing_charge`, `entry_cost`, and `exit_cost`. A stated numeric cell also has `number`, the parsed figure with a dot decimal. `product` has no `number`. A numeric column is `stated` only when one printed figure matches `number`. The model saying the field is absent stores `not_stated`. A claimed value that fails the quote or figure check stores `not_extracted`. Those two states are `{ "state": "…" }` and nothing else.
 

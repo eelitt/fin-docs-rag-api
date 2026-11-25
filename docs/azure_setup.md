@@ -1,9 +1,9 @@
 # Azure setup
 
 Status: **decided**
-Updated: 2026-11-24
+Updated: 2026-11-25
 
-This is the setup a human does in Azure. Do it before M2. Application code and the search index come later. Bicep will describe these same resources. Do not create a second copy of any of them.
+This setup was done before M2. Bicep in `infra/` describes these same resources and has not been deployed. Do not create a second copy of any of them.
 
 Prices and the forbidden list are in `03-architecture.md`. A budget alert does not stop spending. The way to stay near a few dollars is to create only the resources below and to avoid the forbidden list.
 
@@ -22,6 +22,8 @@ Use Sweden Central (`swedencentral`) for every resource. If a name is taken, add
 | Storage account | `stfindocsrag` |
 | Blob container | `documents` |
 | Key Vault | `kv-fin-docs-rag` |
+
+The record table is the names that exist. The Foundry resource, the project, and both deployment names there differ from this table. Do not create a second resource to match a row above.
 
 ## 1. Subscription
 
@@ -101,15 +103,16 @@ Copy endpoints from the portal into a local `.env` that is not committed. Do not
 | --- | --- |
 | `AZURE_OPENAI_ENDPOINT` | Foundry resource, Keys and Endpoint. Use the Azure OpenAI endpoint. |
 | `AZURE_OPENAI_API_KEY` | Foundry resource, Keys and Endpoint. Either key. |
-| `AZURE_OPENAI_CHAT_DEPLOYMENT` | `gpt-4.1-mini` |
-| `AZURE_OPENAI_EMBEDDING_DEPLOYMENT` | `text-embedding-3-small` |
+| `AZURE_OPENAI_CHAT_DEPLOYMENT` | Chat deployment name in the record table. |
+| `AZURE_OPENAI_EMBEDDING_DEPLOYMENT` | Embedding deployment name in the record table. |
 | `AZURE_SEARCH_ENDPOINT` | Search service, Overview. |
 | `AZURE_SEARCH_API_KEY` | Search service, Keys. Admin key. |
 | `AZURE_STORAGE_ACCOUNT` | Storage account name. |
 | `AZURE_STORAGE_CONTAINER` | `documents` |
+| `AZURE_STORAGE_KEY` | Storage account, Security + networking, Access keys. Either key. Local ingest uses it to upload PDFs. Do not put it in the container later. |
 | `AZURE_KEY_VAULT_URL` | Key Vault, Overview, vault URI. |
 
-A playground message in the Foundry project is enough to prove the chat deployment. The embedding deployment has no playground. Its endpoint and name are enough until ingest runs.
+A playground message in the Foundry project is enough to prove the chat deployment. The embedding deployment has no playground. Ingest uses its endpoint and deployment name.
 
 ## Later, not now
 
@@ -144,14 +147,16 @@ Fill this in after setup. Leave secrets out.
 
 | Item | Value |
 | --- | --- |
-| Subscription name | |
+| Subscription name | Azure subscription 1|
 | Resource group | `rg-fin-docs-rag` |
-| Foundry resource name | |
-| Foundry endpoint host | |
-| Chat deployment and type | |
-| Embedding deployment and type | |
-| Search service name and tier | |
-| Storage account name | |
-| Key Vault name | |
-| Extra resources deleted | |
-| Date finished | |
+| Foundry resource name | `rg-fin-docs-rag-resource` |
+| Foundry OpenAI endpoint | `https://rg-fin-docs-rag-resource.openai.azure.com/` |
+| Foundry project endpoint | `https://rg-fin-docs-rag-resource.services.ai.azure.com/api/projects/rg-fin-docs-rag` |
+| Chat deployment and type | `GPT-4-1-mini`. Deployment type was not written down. |
+| Embedding deployment and type | `TEXT-embedding-3-small`. Deployment type was not written down. |
+| Search service name and tier | `srch-fin-docs-rag`, Free |
+| Storage account name | `stfindocsrag` |
+| Blob container | `documents`, private. Ingest created it on 2026-11-25. |
+| Key Vault name | `kv-fin-docs-rag` |
+| Extra resources deleted | not recorded |
+| Date finished | 2026-11-25 |

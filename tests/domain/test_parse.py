@@ -62,5 +62,8 @@ def test_longer_report_chunks_on_its_headings():
         and "Sijoittajat pelkäävät usein vääriä asioita" in chunk.text
     ]
     assert article
-    assert all(chunk.window == 0 or chunk.id.count(":") == 3 for chunk in chunks)
+    assert all(
+        chunk.id == f"{chunk.doc_id}:{chunk.section}:{chunk.page}:{chunk.window}"
+        for chunk in chunks
+    )
     assert len(chunks) > 10

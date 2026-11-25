@@ -4,9 +4,9 @@ Updated: 2026-11-25
 
 ## Phase
 
-`planning`
+`building`
 
-No application code yet. Corpus and the cost cap are decided. Start M1 when the human asks to build.
+M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes: `uv run pytest` is 42 passed and 1 skipped when Azure credentials are not in the environment. The skip is the live hybrid query. With those credentials the live query runs too.
 
 ## Decision
 
@@ -16,27 +16,25 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Last session
 
-2026-11-25. Wrote the six HTTP response rules into `02-product.md`, and pointed the architecture, milestones, and failure table at them. `ongoing_charge` stays a placeholder until M1 records the printed cost-row label here. That key is then renamed in one edit, with no alias, before response models are written.
+2026-11-25. The ongoing-cost column key is `ongoing_charge`, chosen by the human. M3 is in: ingest builds `sheet.json` after the index upload, `GET /sheet` and `GET /compare` read it with no model call, and `POST /ask` routes, then either reads the sheet or retrieves, grades, and checks a cited answer. `uv run pytest` is 42 passed and 1 skipped without Azure credentials. Ingest was not run again, so the blob does not yet hold this `sheet.json`. The next `uv run ingest index` makes one extract call per KID and writes that file only if the run finishes. Bicep was not deployed.
 
-## Measured during M1
-
-Leave these blank until two real files have been parsed.
+## Corpus measurements
 
 | Item | Value |
 | --- | --- |
-| Heading list | |
-| Chunk sizes | |
-| Printed cost-row label | |
-| Known cost figure used in the parser test | |
-| Known risk indicator used in the parser test | |
+| Heading list | KID section keys, in order: `purpose`, `product`, `what`, `risks`, `inability`, `costs`, `holding`, `complaints`, `other`. Printed lines: Tarkoitus (one file prints Tämän asiakirjan tarkoitus), Tuote, Mikä tämä tuote on?, Mitkä ovat riskit ja mitä tuottoa sijoittaja voi saada?, Mitä tapahtuu, jos …, Mitä kuluja sijoittajalle aiheutuu?, Miten pitkäksi aikaa sijoitus olisi tehtävä…, Kuinka sijoittaja voi valittaa?, Muut olennaiset tiedot. English lines of the same sections are recognized. The longer report splits on its own uppercase headings, then on 800-token windows with 120 tokens of overlap. |
+| Chunk sizes | Intact-test KID `FI0008804729`: 13 chunks, 8–1174 tokens. Limit 1200, overlap 100. Longer report `report-2026-q3`: 253 chunks, 2–800 tokens. Limit 800, overlap 120. Rechecked when M2 indexed the file. The earlier count of 244 is superseded. |
+| Printed cost-row label | Two wordings. `FI0008804729`: Hallinnolliset maksut ja muut hallinto- tai toimintakulut. `FI0008804687`: Hallinnointipalkkio ja muut hallinto- tai toimintakulut. |
+| Known cost figure used in the parser test | 0,30 % on `FI0008804729`. The second KID keeps 0,9 prosenttia in one chunk. |
+| Known risk indicator used in the parser test | 2 on `FI0008804729` (the sentence contains määritetty 2). The second KID keeps määritetty 4 in one chunk. |
 
 ## Next action
 
-Human: follow `docs/azure_setup.md`, then fill in its record table. Say when to start M1. M1 does not need Azure. M2 needs the setup finished.
+Human says when to start M4. Do not start it before that. A live sheet needs `uv run ingest index`, which spends one chat call per KID. That command was not run in the M3 session.
 
 ## Blockers
 
-None for M1. M2 needs an Azure subscription. Do not create Azure AI Search Basic.
+None for M3. Do not create Azure AI Search Basic. The live `sheet.json` is absent until the next ingest.
 
 ## Done when this project is interview-ready
 

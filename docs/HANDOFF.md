@@ -1,0 +1,67 @@
+# Handoff
+
+Updated: 2026-11-25
+
+This file briefs the next agent. It is not the coding rules.
+
+Before any code change, read `Claude.md` and follow it. That file holds the coding instructions. Do not copy them here, and do not put session state in `Claude.md`.
+
+`docs/` is the source of truth. If this file and `STATUS.md` disagree, `STATUS.md` wins. At the end of a session, update `STATUS.md` and the "Now" section here.
+
+## Read first
+
+1. This file.
+2. `Claude.md`, before writing or editing code.
+3. `STATUS.md` — phase, next action, blockers, measurements.
+4. The current milestone in `04-milestones.md`.
+5. `05-open-questions.md` only if the next action is blocked.
+
+Then open the doc the task touches. Do not re-decide a choice marked **decided**. Record a reversal in `STATUS.md` before changing it.
+
+## Now
+
+Phase: `building`. M1, M2, and M3 passed. M3 passed on fakes. The live `sheet.json` is not in the blob yet.
+
+Next action: the human says when to start M4. Do not start M4 before that. The ongoing-cost column key is `ongoing_charge`. To put the sheet in the blob, run `uv run ingest index`. That spends one chat call per KID and writes `sheet.json` only if the run finishes. It was not run in the M3 session.
+
+The human has not asked for a commit.
+
+## Done
+
+- Corpus: 12 KIDs and one quarterly review. Manifest at `sources/manifest.json`. PDFs are gitignored under `data/pdfs/`. `scripts/download_sources.py` downloads them.
+- Parser and chunker. Chunk id is `{doc_id}:{section}:{page}:{window}`. Sizes are in `STATUS.md`. Do not retune 1200/100 or 800/120.
+- Ingest: `uv run ingest index` creates the private `documents` container if needed, uploads the PDFs, embeds, and pushes index `chunks`. `uv run ingest query "..."` runs hybrid search.
+- The known-charge query returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`.
+- Search document key is `chunk_key` (colons replaced with underscores). The `id` field keeps the colon form.
+- A KID chunk stores every checksum-valid ISIN in that file. A report chunk stores only the ISINs in that chunk.
+- `uv run pytest`: 42 passed, 1 skipped, without Azure variables in the environment. The skip is the live hybrid query. With those variables it runs too.
+- M3: sheet extract, quote check, `GET /sheet`, `GET /compare`, and `POST /ask`. The five question types pass on fakes. `GET /sheet` does not call the model. The column key is `ongoing_charge`.
+- Bicep is in `infra/`. It was not deployed. The portal resources already exist. Do not deploy it. Azure CLI is not installed here.
+
+`e21c090` (`first commit`) is older than the working tree. The parser fixes, M2, and M3 are uncommitted. Trust the working tree.
+
+## Do not
+
+- Implement `idea_one.md`. The decisions are in `docs/`.
+- Open M4 or later to fill out the repo. `07-code-architecture.md` is the full map. Through M3 only the files named there exist.
+- Create Azure AI Search Basic, a second search service, semantic ranker, provisioned throughput, Document Intelligence, Container Registry, or SFTP.
+- Put secrets, connection strings, or keys in docs, chat, or git. They stay in `.env`.
+- Name a bank or a fund company in docs, UI, README, or code. The sources manifest is the exception. Chunk text may contain whatever the PDF prints.
+- Commit unless the human asks.
+
+## Run
+
+From the repo root, in PowerShell. `&&` is not available. `uv` is at `C:\Users\Eerik\.local\bin` and is not on `PATH` until you prepend it. Python is not on `PATH`.
+
+This machine sets `REQUESTS_CA_BUNDLE` to a missing certificate file. Before `uv run`, set `REQUESTS_CA_BUNDLE` and `SSL_CERT_FILE` to `.venv\Lib\site-packages\certifi\cacert.pem`.
+
+```
+uv run pytest
+uv run python scripts/download_sources.py
+uv run ingest index
+uv run ingest query "Hallinnolliset maksut ja muut hallinto- tai toimintakulut 0,30 %"
+```
+
+`ingest` loads `.env`. `pytest` does not. The integration test runs only when `AZURE_SEARCH_API_KEY` is already in the environment.
+
+Resource names, the OpenAI endpoint, and the deployment names are in the record table in `azure_setup.md`. The deployment type was not written down. Do not guess it.

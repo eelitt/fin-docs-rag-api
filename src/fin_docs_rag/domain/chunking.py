@@ -17,6 +17,7 @@ _ENCODER = tiktoken.get_encoding("cl100k_base")
 # or wrap onto a second line.
 _EXACT_HEADINGS = {
     "tarkoitus": "purpose",
+    "tämän asiakirjan tarkoitus": "purpose",
     "purpose": "purpose",
     "tuote": "product",
     "product": "product",
@@ -37,7 +38,6 @@ _PREFIX_HEADINGS = (
     ("muut olennaiset tiedot", "other"),
     ("other relevant information", "other"),
 )
-_FOOTER = re.compile(r"seligson\s*&\s*co\s+\d+\s*$", re.IGNORECASE)
 _LETTERS = re.compile(r"[^\W\d_]", re.UNICODE)
 
 
@@ -120,8 +120,6 @@ def _report_sections(pages: Sequence[tuple[int, str]]) -> list[tuple[str, int, s
     blocks: list[tuple[str, int, list[str]]] = []
     for number, text in pages:
         for line in _lines(text):
-            if _FOOTER.match(line):
-                continue
             if _is_report_heading(line):
                 section = _slug(line)
             _append(blocks, section, number, line)
@@ -162,22 +160,17 @@ def _windows(text: str, limit: int, overlap: int) -> list[str]:
         parts = [part for part in text.split("\n") if part.strip()]
     windows: list[str] = []
     current: list[str] = []
-    current_tokens = 0
     for part in parts:
         if _count(part) > limit:
             if current:
                 windows.append("\n".join(current))
                 current = []
-                current_tokens = 0
             windows.extend(_hard_windows(part, limit, overlap))
             continue
-        part_tokens = _count(part)
-        if current and current_tokens + part_tokens > limit:
+        if current and _count("\n".join(current + [part])) > limit:
             windows.append("\n".join(current))
             current = _overlap_tail(current, overlap)
-            current_tokens = _count("\n".join(current)) if current else 0
         current.append(part)
-        current_tokens += part_tokens
     if current:
         windows.append("\n".join(current))
     return windows

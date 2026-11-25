@@ -1,15 +1,16 @@
 # Plan index
 
-This folder is the source of truth. Code comes later. A new session starts here and must not re-decide things already marked decided.
+This folder is the source of truth. A new session starts here and must not re-decide things already marked decided.
 
 Two goals. Show the production AI work missing from portfolio-tracker, for later wealth-management AI engineer roles. Run that system on Azure for real, so the Azure experience is the work, not a write-up. An example role of this type closes on 2026-12-01. That date does not set the build order. The order is `04-milestones.md`.
 
 ## Read order for a new session
 
-1. `STATUS.md` — phase, next action, blockers.
-2. `00-context.md` — why the project exists.
-3. The current milestone in `04-milestones.md`. While phase is `planning`, that milestone is M1. M1 needs no Azure. M2 waits until `azure_setup.md` is done.
-4. `05-open-questions.md` only if the next action is blocked. It has no open blockers.
+1. `HANDOFF.md` — briefing for a new agent. Before any code change, read `Claude.md`.
+2. `STATUS.md` — phase, next action, blockers. If it disagrees with `HANDOFF.md`, this file wins.
+3. `00-context.md` — why the project exists.
+4. The current milestone in `04-milestones.md`. `STATUS.md` says which one is next.
+5. `05-open-questions.md` only if the next action is blocked.
 
 Skip the rest unless the task touches it.
 
@@ -17,16 +18,17 @@ Skip the rest unless the task touches it.
 
 | File | Role |
 | --- | --- |
-| `STATUS.md` | Living handoff. Update it at the end of every session. Holds the M1 measurements and the interview-ready bar. |
+| `HANDOFF.md` | Briefing for the next agent. Update its "Now" section with `STATUS.md`. |
+| `STATUS.md` | Living handoff. Update it at the end of every session. Holds the measurements and the interview-ready bar. |
 | `00-context.md` | Portfolio gap, the two goals, and what a hiring reader still cannot see. |
 | `01-gap-map.md` | Job signal → portfolio evidence → what this repo shows, and the non-goals. |
 | `02-product.md` | User, corpus, fact sheet, follow-up questions, response bodies, demo. |
 | `03-architecture.md` | Stack, request path, deploy shape, cost, forbidden resources. Decided for v1. |
 | `04-milestones.md` | Build order, M1 through M9. One milestone at a time. |
-| `05-open-questions.md` | Closed choices and parked items. Nothing in it blocks M1. |
+| `05-open-questions.md` | Closed choices and parked items. The remaining column-key choice is in `STATUS.md`. |
 | `06-ai-architecture.md` | Model calls, index, chunking, quote check, eval, libraries left out. |
 | `07-code-architecture.md` | Python modules, one job each, and the dependency rule. |
-| `azure_setup.md` | Portal setup before M2, the record table, and what to leave uncreated. No secrets in that file. |
+| `azure_setup.md` | Portal setup record. Done before M2. No secrets in that file. |
 
 `idea_one.md` at the repo root is the original note. Do not implement it. The living decisions are the files in this folder.
 

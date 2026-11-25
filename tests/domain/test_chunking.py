@@ -43,7 +43,6 @@ def test_long_section_splits_and_ids_stay_stable():
 def test_report_splits_on_its_own_heading():
     pages = [
         (3, "SIJOITTAMISEN NELJÄ TODELLISTA RISKIÄ\nSijoittajat pelkäävät usein vääriä asioita."),
-        (3, "SELIGSON & CO 3"),
     ]
     chunks = chunk_document("report-2026-q3", pages, "report")
     assert len(chunks) == 1

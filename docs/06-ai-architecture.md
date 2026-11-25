@@ -43,15 +43,16 @@ Client library: the official OpenAI Python SDK pointed at the Azure OpenAI endpo
 
 ## Index
 
-One index, created by the ingest command. Fields:
+One index, named `chunks`, created by the ingest command. Fields:
 
 | Field | Role |
 | --- | --- |
-| `id` | `{doc_id}:{section}:{page}:{window}`. `window` is `0` when the section is one chunk. Re-index must reproduce the same ids. |
+| `chunk_key` | Search document key. The chunk id with `:` replaced by `_`. A search key cannot contain `:`. |
+| `id` | `{doc_id}:{section}:{page}:{window}`. `window` is `0` when the section is one chunk. This field is stored and returned. It is not the search key. Re-index must reproduce the same ids. |
 | `content` | Searchable text. Analyzer `fi.microsoft`, so Finnish inflection still matches on the keyword side. English text in the corpus relies on the vector. |
-| `content_vector` | 1536-d vector, cosine, HNSW. |
+| `content_vector` | 1536-d vector, cosine, HNSW. Not returned with the hit. |
 | `doc_id`, `source_title`, `page`, `section` | Returned with the hit and shown in the citation. |
-| `isin` | Filterable. Extracted at ingest with an ISIN regex, not by the model. |
+| `isin` | Filterable collection. A KID chunk stores every checksum-valid ISIN in that file. A report chunk stores only the ISINs in that chunk. Extracted with the ISIN regex, not by the model. |
 | `language` | `fi` or `en`, from the manifest. Filterable. |
 
 Do not create the index by hand in the portal.
@@ -62,9 +63,9 @@ KIDs follow the PRIIPs outline (purpose, product, risks and performance, inabili
 
 The longer report splits on its own headings, then on about 800-token windows with about 120 tokens of overlap. Every chunk keeps its page number.
 
-M1 confirms the heading list against two real files and records the final sizes in `STATUS.md`. The same pass copies the printed cost-row label into `STATUS.md`. The sheet, the router, and `GET /compare` then replace the `ongoing_charge` placeholder in one edit, with no alias, before response models are written. Until a live eval shows a miss, do not retune the sizes.
+M1 confirmed the heading list against two real files. `STATUS.md` holds the sizes and the two printed cost-row labels. The ongoing-cost column key is `ongoing_charge`, chosen 2026-11-25, with no alias. Until a live eval shows a miss, do not retune the sizes.
 
-A PDF with no text layer fails ingest for that file. There is no OCR in v1. A text layer is not enough when the costs sit in a table: M1 fails if a known cost figure or a known risk indicator from one real KID is missing or split across two chunks. Fix the parser before M2. Do not add Document Intelligence to get past that test.
+A PDF with no text layer fails ingest for that file. There is no OCR in v1. A text layer is not enough when the costs sit in a table. M1 keeps a known cost figure and a known risk indicator each inside one chunk. Do not add Document Intelligence to get past that test.
 
 The quote shown in the product is a short snippet. Ingest does not publish the original PDF.
 
@@ -77,7 +78,7 @@ One chat call. Input is the raw question. Output:
 - `intent`: `lookup`, `compare`, or `advice`
 - `advice_confidence`: `high` or `low`
 - `funds`: names or ISINs mentioned
-- `comparison_field`: `ongoing_charge` (placeholder until M1 records the printed row; then one rename, with no alias, as in `02-product.md`), `sri`, `holding_period`, `entry_cost`, or `exit_cost`, or empty
+- `comparison_field`: `ongoing_charge`, `sri`, `holding_period`, `entry_cost`, or `exit_cost`, or empty
 - `search_query`: a short query for hybrid search
 
 `advice` plus `high` returns `advice_refused` and stops. `advice` plus `low` still retrieves, and the answer step may still refuse. A question about a sheet column is served from `sheet.json` when the named fund resolves to a row. The prompt examples must say that a holding period or a risk indicator is that kind of lookup, not advice. A column question whose fund does not resolve falls through to search.

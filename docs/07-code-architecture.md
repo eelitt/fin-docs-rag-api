@@ -5,6 +5,8 @@ Updated: 2026-11-25
 
 How the Python code is split. Product behavior is in `02-product.md`. The model path is in `06-ai-architecture.md`. This file is the module map. Each module has one reason to change.
 
+Through M3 the repo has the M2 modules plus `domain/verify.py`, `domain/calculate.py`, `ports.py`, `pipeline.py`, `trace.py`, the step modules, `adapters/openai_chat.py`, `adapters/prompts.py`, `ingest/sheet.py`, `http/app.py`, and `prompts/`. Bicep is in `infra/`. Eval, telemetry, MLflow, and `frontend/` are later milestones.
+
 ## Rule
 
 A module owns one job. A change to that job should land in that module and leave the others alone.

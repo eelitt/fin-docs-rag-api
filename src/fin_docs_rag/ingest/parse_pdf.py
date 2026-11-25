@@ -1,4 +1,3 @@
-import re
 from dataclasses import dataclass
 
 import pymupdf
@@ -28,14 +27,14 @@ def parse_pdf(data: bytes) -> list[PdfPage]:
 
 def _page_text(page: pymupdf.Page) -> str:
     blocks = [block for block in page.get_text("blocks") if block[6] == 0 and block[4].strip()]
-    lines = [_block_text(block[4]) for block in _reading_order(blocks)]
-    return "\n".join(line for line in lines if line)
+    lines = []
+    for block in _reading_order(blocks):
+        lines.extend(_block_lines(block[4]))
+    return "\n".join(lines)
 
 
-def _block_text(raw: str) -> str:
-    # A hyphen at the end of a visual line is a line-break hyphen, not a word hyphen.
-    joined = re.sub(r"-\s*\n\s*", "", raw.replace("\r", ""))
-    return " ".join(joined.split())
+def _block_lines(raw: str) -> list[str]:
+    return [" ".join(line.split()) for line in raw.replace("\r", "").split("\n") if line.strip()]
 
 
 def _reading_order(blocks: list[tuple]) -> list[tuple]:

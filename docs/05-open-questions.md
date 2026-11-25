@@ -2,7 +2,7 @@
 
 Updated: 2026-11-25
 
-No blockers. Agents may start M1 without more product decisions. M2 still needs the human to create or select an Azure subscription and to apply the budget alert before any paid resource is created.
+No open product questions. M1, M2, and M3 are done, and the Azure setup in `azure_setup.md` is done. The ongoing-cost column key is `ongoing_charge`, chosen 2026-11-25.
 
 ## Closed
 
@@ -30,7 +30,7 @@ Rejected, and not open:
 
 ### HTTP response shapes
 
-Closed 2026-11-25. `GET /sheet`, `GET /compare`, and `POST /ask` bodies, the error object, and the `/ask` check order are in `02-product.md`. `GET /compare` takes `isin_a` and `isin_b` and compares the ongoing-cost column. A question longer than 1,000 characters is HTTP 400. The rate limit counts only envelopes that pass those checks. `ongoing_charge` remains a placeholder until M1. The key is then renamed in one edit, with no alias, before response models are written.
+Closed 2026-11-25. `GET /sheet`, `GET /compare`, and `POST /ask` bodies, the error object, and the `/ask` check order are in `02-product.md`. `GET /compare` takes `isin_a` and `isin_b` and compares the ongoing-cost column. A question longer than 1,000 characters is HTTP 400. The rate limit counts only envelopes that pass those checks. The two printed cost-row labels are in `STATUS.md`. The ongoing-cost column key is `ongoing_charge`, chosen 2026-11-25, with no alias.
 
 ## Parked
 
@@ -43,4 +43,4 @@ These are not blockers. The plan already chooses an answer. Reopen only by editi
 - Reopening the AI-path rejections above: only by editing `06-ai-architecture.md` and recording the reversal in `STATUS.md`.
 - Treating "which is cheaper?" as advice: no. It is a comparison of two stored cells. The template states the difference and does not rank the funds. See `02-product.md`.
 - A separate frontend host: no. The UI is a Vite React app built to static files and served by the same Container App. See `03-architecture.md`.
-- The printed cost-row label: not open as a product choice. M1 copies it from two real KIDs into `STATUS.md`. `ongoing_charge` is a placeholder until then. The sheet, the router, and `GET /compare` then take that key in one edit. There is no alias.
+- The printed cost-row label: not open as a product choice. Both wordings are in `STATUS.md`. The column key is `ongoing_charge`, chosen 2026-11-25. There is no alias.
