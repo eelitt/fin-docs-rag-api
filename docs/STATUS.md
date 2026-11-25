@@ -16,7 +16,7 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Last session
 
-2026-11-25. M4 is in. The golden file is `eval/golden.json` (version `1`, 29 items, k = 8). Pull-request CI runs `uv run pytest`, which scores that file on fakes. A refusal with an answer body fails, and so does a path other than the item's label. `uv run eval-run` is the manual live run. It calls Azure and writes one MLflow file-store run. It was not run. Ingest was not run again, so the blob still has no `sheet.json`. Bicep was not deployed. Nothing was committed.
+2026-11-25. M4 is in. The golden file is `eval/golden.json` (version `1`, 29 items, k = 8). Pull-request CI runs `uv run pytest`, which scores that file on fakes. A refusal with an answer body fails, and so does a path other than the item's label. `uv run eval-run` is the manual live run. It calls Azure and writes one MLflow file-store run. It was not run. Ingest was not run again, so the blob still has no `sheet.json`. Bicep was not deployed. The root `README.md` is the recruiter page: what the project is, what is in the repo, and the disclaimer. The M8 README (run steps, deploy, live eval numbers) is still later. Nothing was committed.
 
 ## Corpus measurements
 

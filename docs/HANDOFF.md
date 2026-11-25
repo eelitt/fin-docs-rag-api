@@ -37,6 +37,7 @@ The human has not asked for a commit.
 - `uv run pytest`: 52 passed, 1 skipped, without Azure variables in the environment. The skip is the live hybrid query. With those variables it runs too.
 - M3: sheet extract, quote check, `GET /sheet`, `GET /compare`, and `POST /ask`. The five question types pass on fakes. `GET /sheet` does not call the model. The column key is `ongoing_charge`.
 - M4: `eval/golden.json` (29 items, k = 8). `uv run pytest` scores it on fakes: 52 passed, 1 skipped without Azure variables. `.github/workflows/tests.yml` runs that on pull requests. `.github/workflows/eval.yml` is manual and runs `uv run eval-run`.
+- Root `README.md` tells a recruiter what the project is. It is not the M8 README. Run steps, deploy, and live eval numbers stay out of it until M8.
 - Bicep is in `infra/`. It was not deployed. The portal resources already exist. Do not deploy it. Azure CLI is not installed here.
 
 `e21c090` (`first commit`) is older than the working tree. The parser fixes, M2, and M3 are uncommitted. Trust the working tree.
