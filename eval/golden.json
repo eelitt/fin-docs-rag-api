@@ -1,0 +1,886 @@
+{
+  "version": "1",
+  "k": 8,
+  "items": [
+    {
+      "id": "fact-charge-4729",
+      "question_type": "fact",
+      "question": "What is the ongoing cost of FI0008804729?",
+      "instrument_ids": [
+        "FI0008804729"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": 0.3
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-charge-4729-fi",
+      "question_type": "fact",
+      "question": "Mikä on rahaston FI0008804729 juokseva kulu?",
+      "instrument_ids": [
+        "FI0008804729"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": 0.3
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-sri-4729",
+      "question_type": "fact",
+      "question": "What is the risk indicator of FI0008804729?",
+      "instrument_ids": [
+        "FI0008804729"
+      ],
+      "path": "sheet",
+      "field": "sri",
+      "outcome": {
+        "kind": "number",
+        "value": 2
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "sri",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-holding-4729",
+      "question_type": "fact",
+      "question": "What is the recommended holding period of FI0008804729?",
+      "instrument_ids": [
+        "FI0008804729"
+      ],
+      "path": "sheet",
+      "field": "holding_period",
+      "outcome": {
+        "kind": "number",
+        "value": 1
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "holding_period",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-charge-4687",
+      "question_type": "fact",
+      "question": "What is the ongoing cost of FI0008804687?",
+      "instrument_ids": [
+        "FI0008804687"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": 0.9
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-holding-4687",
+      "question_type": "fact",
+      "question": "What is the recommended holding period of FI0008804687?",
+      "instrument_ids": [
+        "FI0008804687"
+      ],
+      "path": "sheet",
+      "field": "holding_period",
+      "outcome": {
+        "kind": "number",
+        "value": 5
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "holding_period",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-charge-1907",
+      "question_type": "fact",
+      "question": "What is the ongoing cost of FI0008801907?",
+      "instrument_ids": [
+        "FI0008801907"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": 0.53
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-charge-5486",
+      "question_type": "fact",
+      "question": "What is the ongoing cost of FI0008805486?",
+      "instrument_ids": [
+        "FI0008805486"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": 0.95
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-charge-1774",
+      "question_type": "fact",
+      "question": "What is the ongoing cost of FI0008801774?",
+      "instrument_ids": [
+        "FI0008801774"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": 0.44
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-charge-4760",
+      "question_type": "fact",
+      "question": "What is the ongoing cost of FI0008804760?",
+      "instrument_ids": [
+        "FI0008804760"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": 1.52
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-sri-1733",
+      "question_type": "fact",
+      "question": "What is the risk indicator of FI0008801733?",
+      "instrument_ids": [
+        "FI0008801733"
+      ],
+      "path": "sheet",
+      "field": "sri",
+      "outcome": {
+        "kind": "number",
+        "value": 1
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "sri",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "fact-charge-10866",
+      "question_type": "fact",
+      "question": "What is the ongoing cost of FI0008810866?",
+      "instrument_ids": [
+        "FI0008810866"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": 0.7
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "compare-charge-different-holding",
+      "question_type": "comparison",
+      "case": "different_holding_periods",
+      "question": "Which is cheaper, FI0008804729 or FI0008804687?",
+      "instrument_ids": [
+        "FI0008804729",
+        "FI0008804687"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": -0.6
+      },
+      "fake": {
+        "route": {
+          "intent": "compare",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "compare-charge-same-holding",
+      "question_type": "comparison",
+      "question": "Compare the ongoing cost of FI0008801774 and FI0008801758.",
+      "instrument_ids": [
+        "FI0008801774",
+        "FI0008801758"
+      ],
+      "path": "sheet",
+      "field": "ongoing_charge",
+      "outcome": {
+        "kind": "number",
+        "value": -0.02
+      },
+      "fake": {
+        "route": {
+          "intent": "compare",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "ongoing_charge",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "compare-sri-different-holding",
+      "question_type": "comparison",
+      "question": "Compare the risk indicator of FI0008804729 and FI0008801907.",
+      "instrument_ids": [
+        "FI0008804729",
+        "FI0008801907"
+      ],
+      "path": "sheet",
+      "field": "sri",
+      "outcome": {
+        "kind": "number",
+        "value": -1
+      },
+      "fake": {
+        "route": {
+          "intent": "compare",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "sri",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "advice-buy-en",
+      "question_type": "advice",
+      "question": "Should I buy FI0008804729?",
+      "instrument_ids": [
+        "FI0008804729"
+      ],
+      "path": "refuse",
+      "outcome": {
+        "kind": "reason",
+        "value": "advice_refused"
+      },
+      "fake": {
+        "route": {
+          "intent": "advice",
+          "advice_confidence": "high",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "advice-buy-fi",
+      "question_type": "advice",
+      "question": "Pitäisikö minun ostaa rahasto FI0008804687?",
+      "instrument_ids": [
+        "FI0008804687"
+      ],
+      "path": "refuse",
+      "outcome": {
+        "kind": "reason",
+        "value": "advice_refused"
+      },
+      "fake": {
+        "route": {
+          "intent": "advice",
+          "advice_confidence": "high",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "advice-allocation",
+      "question_type": "advice",
+      "question": "Recommend how I should split my savings between these funds.",
+      "instrument_ids": [],
+      "path": "refuse",
+      "outcome": {
+        "kind": "reason",
+        "value": "advice_refused"
+      },
+      "fake": {
+        "route": {
+          "intent": "advice",
+          "advice_confidence": "high",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "advice-phoebus-retirement",
+      "question_type": "advice",
+      "question": "Is Phoebus a good investment for my retirement?",
+      "instrument_ids": [],
+      "path": "refuse",
+      "outcome": {
+        "kind": "reason",
+        "value": "advice_refused"
+      },
+      "fake": {
+        "route": {
+          "intent": "advice",
+          "advice_confidence": "high",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": ""
+        }
+      }
+    },
+    {
+      "id": "advice-low-suitability",
+      "question_type": "advice",
+      "question": "How does the ongoing cost affect whether FI0008804729 is suitable for me?",
+      "instrument_ids": [
+        "FI0008804729"
+      ],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "reason",
+        "value": "advice_refused"
+      },
+      "fake": {
+        "route": {
+          "intent": "advice",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": "advice-low-suitability"
+        },
+        "passages": [
+          {
+            "id": "FI0008804729:costs:3:0",
+            "doc_id": "FI0008804729",
+            "section": "costs",
+            "page": 3,
+            "window": 0,
+            "title": "KID",
+            "text": "0,30 %"
+          }
+        ],
+        "relevant": [
+          "FI0008804729:costs:3:0"
+        ],
+        "draft": {
+          "can_answer": false,
+          "answer": "",
+          "citations": [],
+          "reason": "advice_refused"
+        }
+      }
+    },
+    {
+      "id": "absence-shoe",
+      "question_type": "absence",
+      "question": "What is the portfolio manager's shoe size?",
+      "instrument_ids": [],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "reason",
+        "value": "not_in_corpus"
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": "absence-shoe"
+        },
+        "passages": [
+          {
+            "id": "report-2026-q3:sisallys:2:0",
+            "doc_id": "report-2026-q3",
+            "section": "sisallys",
+            "page": 2,
+            "window": 0,
+            "title": "Neljännesvuosikatsaus 3/2026",
+            "text": "Neljännesvuosikatsaus."
+          }
+        ],
+        "relevant": []
+      }
+    },
+    {
+      "id": "absence-dividend",
+      "question_type": "absence",
+      "question": "What dividend did FI0008804729 pay on 1 January 1990?",
+      "instrument_ids": [
+        "FI0008804729"
+      ],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "reason",
+        "value": "not_in_corpus"
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": "absence-dividend"
+        },
+        "passages": [
+          {
+            "id": "report-2026-q3:sisallys:2:0",
+            "doc_id": "report-2026-q3",
+            "section": "sisallys",
+            "page": 2,
+            "window": 0,
+            "title": "Neljännesvuosikatsaus 3/2026",
+            "text": "Neljännesvuosikatsaus."
+          }
+        ],
+        "relevant": []
+      }
+    },
+    {
+      "id": "absence-color",
+      "question_type": "absence",
+      "question": "What is the auditor's favorite color in the quarterly review?",
+      "instrument_ids": [],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "reason",
+        "value": "not_in_corpus"
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": "absence-color"
+        },
+        "passages": [
+          {
+            "id": "report-2026-q3:sisallys:2:0",
+            "doc_id": "report-2026-q3",
+            "section": "sisallys",
+            "page": 2,
+            "window": 0,
+            "title": "Neljännesvuosikatsaus 3/2026",
+            "text": "Neljännesvuosikatsaus."
+          }
+        ],
+        "relevant": []
+      }
+    },
+    {
+      "id": "report-pharos-size",
+      "question_type": "long_document",
+      "question": "What Pharos fund size, in million euro, does the quarterly review print?",
+      "instrument_ids": [],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "source",
+        "value": "report-2026-q3"
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [
+            "Pharos"
+          ],
+          "comparison_field": "",
+          "search_query": "report-pharos-size"
+        },
+        "passages": [
+          {
+            "id": "report-2026-q3:rahaston-avaintiedot:9:0",
+            "doc_id": "report-2026-q3",
+            "section": "rahaston-avaintiedot",
+            "page": 9,
+            "window": 0,
+            "title": "Neljännesvuosikatsaus 3/2026",
+            "text": "Rahaston koko (milj. euroa) 178,9"
+          }
+        ],
+        "relevant": [
+          "report-2026-q3:rahaston-avaintiedot:9:0"
+        ],
+        "draft": {
+          "can_answer": true,
+          "answer": "The fund size was 178.9 million euro.",
+          "citations": [
+            {
+              "chunk_id": "report-2026-q3:rahaston-avaintiedot:9:0",
+              "quote": "178,9"
+            }
+          ],
+          "reason": ""
+        }
+      },
+      "chunk_id": "report-2026-q3:rahaston-avaintiedot:9:0"
+    },
+    {
+      "id": "report-pharos-quarter",
+      "question_type": "long_document",
+      "question": "What quarterly change for Pharos does the review print as percent?",
+      "instrument_ids": [],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "source",
+        "value": "report-2026-q3"
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [
+            "Pharos"
+          ],
+          "comparison_field": "",
+          "search_query": "report-pharos-quarter"
+        },
+        "passages": [
+          {
+            "id": "report-2026-q3:pharos:10:2",
+            "doc_id": "report-2026-q3",
+            "section": "pharos",
+            "page": 10,
+            "window": 2,
+            "title": "Neljännesvuosikatsaus 3/2026",
+            "text": "tuotti neljänneksen aikana +0,5 %"
+          }
+        ],
+        "relevant": [
+          "report-2026-q3:pharos:10:2"
+        ],
+        "draft": {
+          "can_answer": true,
+          "answer": "The quarterly change was 0.5 percent.",
+          "citations": [
+            {
+              "chunk_id": "report-2026-q3:pharos:10:2",
+              "quote": "0,5 %"
+            }
+          ],
+          "reason": ""
+        }
+      },
+      "chunk_id": "report-2026-q3:pharos:10:2"
+    },
+    {
+      "id": "report-nokia-weight",
+      "question_type": "long_document",
+      "question": "What weight does the quarterly review print for Nokia in the Finland index fund?",
+      "instrument_ids": [],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "source",
+        "value": "report-2026-q3"
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": "report-nokia-weight"
+        },
+        "passages": [
+          {
+            "id": "report-2026-q3:nokia-oyj:21:0",
+            "doc_id": "report-2026-q3",
+            "section": "nokia-oyj",
+            "page": 21,
+            "window": 0,
+            "title": "Neljännesvuosikatsaus 3/2026",
+            "text": "NOKIA OYJ Suomi 10,4 %"
+          }
+        ],
+        "relevant": [
+          "report-2026-q3:nokia-oyj:21:0"
+        ],
+        "draft": {
+          "can_answer": true,
+          "answer": "The printed weight is 10.4 percent.",
+          "citations": [
+            {
+              "chunk_id": "report-2026-q3:nokia-oyj:21:0",
+              "quote": "10,4 %"
+            }
+          ],
+          "reason": ""
+        }
+      },
+      "chunk_id": "report-2026-q3:nokia-oyj:21:0"
+    },
+    {
+      "id": "near-pharos-phoebus",
+      "question_type": "fact",
+      "question": "What is the ongoing cost of Pharos, not Phoebus?",
+      "instrument_ids": [],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "source",
+        "value": "FI0008801907"
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [
+            "Pharos"
+          ],
+          "comparison_field": "",
+          "search_query": "near-pharos-phoebus"
+        },
+        "passages": [
+          {
+            "id": "FI0008801907:costs:3:0",
+            "doc_id": "FI0008801907",
+            "section": "costs",
+            "page": 3,
+            "window": 0,
+            "title": "KID",
+            "text": "0,53 % vuodessa (vuonna 2025)."
+          },
+          {
+            "id": "FI0008805486:costs:3:0",
+            "doc_id": "FI0008805486",
+            "section": "costs",
+            "page": 3,
+            "window": 0,
+            "title": "KID",
+            "text": "0,95 % vuodessa (vuonna 2025)."
+          }
+        ],
+        "relevant": [
+          "FI0008801907:costs:3:0",
+          "FI0008805486:costs:3:0"
+        ],
+        "draft": {
+          "can_answer": true,
+          "answer": "The ongoing cost is 0.53 percent.",
+          "citations": [
+            {
+              "chunk_id": "FI0008801907:costs:3:0",
+              "quote": "0,53 %"
+            }
+          ],
+          "reason": ""
+        }
+      },
+      "chunk_id": "FI0008801907:costs:3:0",
+      "case": "similar_names"
+    },
+    {
+      "id": "near-eurooppa",
+      "question_type": "fact",
+      "question": "What is the ongoing cost of Eurooppa Indeksirahasto, not Eurooppa Keskisuuret?",
+      "instrument_ids": [],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "source",
+        "value": "FI0008801774"
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [
+            "Eurooppa Indeksirahasto"
+          ],
+          "comparison_field": "",
+          "search_query": "near-eurooppa"
+        },
+        "passages": [
+          {
+            "id": "FI0008801774:costs:3:0",
+            "doc_id": "FI0008801774",
+            "section": "costs",
+            "page": 3,
+            "window": 0,
+            "title": "KID",
+            "text": "0,44 % vuodessa (vuonna 2025)."
+          },
+          {
+            "id": "FI0008804760:costs:3:0",
+            "doc_id": "FI0008804760",
+            "section": "costs",
+            "page": 3,
+            "window": 0,
+            "title": "KID",
+            "text": "1,52 % vuodessa (vuonna 2025)."
+          }
+        ],
+        "relevant": [
+          "FI0008801774:costs:3:0",
+          "FI0008804760:costs:3:0"
+        ],
+        "draft": {
+          "can_answer": true,
+          "answer": "The ongoing cost is 0.44 percent.",
+          "citations": [
+            {
+              "chunk_id": "FI0008801774:costs:3:0",
+              "quote": "0,44 %"
+            }
+          ],
+          "reason": ""
+        }
+      },
+      "chunk_id": "FI0008801774:costs:3:0",
+      "case": "similar_names"
+    },
+    {
+      "id": "retrieve-bad-quote",
+      "question_type": "fact",
+      "question": "What is the ongoing cost printed for FI0008804729 in the long report?",
+      "instrument_ids": [
+        "FI0008804729"
+      ],
+      "path": "retrieve",
+      "outcome": {
+        "kind": "reason",
+        "value": "ungrounded"
+      },
+      "fake": {
+        "route": {
+          "intent": "lookup",
+          "advice_confidence": "low",
+          "funds": [],
+          "comparison_field": "",
+          "search_query": "retrieve-bad-quote"
+        },
+        "passages": [
+          {
+            "id": "FI0008804729:costs:3:0",
+            "doc_id": "FI0008804729",
+            "section": "costs",
+            "page": 3,
+            "window": 0,
+            "title": "KID",
+            "text": "0,30 % vuodessa."
+          }
+        ],
+        "relevant": [
+          "FI0008804729:costs:3:0"
+        ],
+        "draft": {
+          "can_answer": true,
+          "answer": "The cost is 9.99 percent.",
+          "citations": [
+            {
+              "chunk_id": "FI0008804729:costs:3:0",
+              "quote": "9,99 %"
+            }
+          ],
+          "reason": ""
+        }
+      }
+    }
+  ]
+}

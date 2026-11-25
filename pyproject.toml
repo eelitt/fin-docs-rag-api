@@ -15,9 +15,14 @@ dependencies = [
 
 [project.scripts]
 ingest = "fin_docs_rag.ingest.run:main"
+eval-run = "fin_docs_rag.eval.run:main"
 
 [dependency-groups]
-dev = ["httpx>=0.27", "pytest>=8"]
+dev = [
+    "httpx>=0.27",
+    "mlflow>=3.18.0",
+    "pytest>=8",
+]
 
 [build-system]
 requires = ["hatchling"]

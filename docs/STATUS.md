@@ -6,7 +6,7 @@ Updated: 2026-11-25
 
 `building`
 
-M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes: `uv run pytest` is 42 passed and 1 skipped when Azure credentials are not in the environment. The skip is the live hybrid query. With those credentials the live query runs too.
+M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes. M4 passed on fakes: `eval/golden.json` has 29 items, and `uv run pytest` is 52 passed and 1 skipped when Azure credentials are not in the environment. The skip is the live hybrid query. With those credentials the live query runs too. The manual live eval was not run.
 
 ## Decision
 
@@ -16,7 +16,7 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Last session
 
-2026-11-25. The ongoing-cost column key is `ongoing_charge`, chosen by the human. M3 is in: ingest builds `sheet.json` after the index upload, `GET /sheet` and `GET /compare` read it with no model call, and `POST /ask` routes, then either reads the sheet or retrieves, grades, and checks a cited answer. `uv run pytest` is 42 passed and 1 skipped without Azure credentials. Ingest was not run again, so the blob does not yet hold this `sheet.json`. The next `uv run ingest index` makes one extract call per KID and writes that file only if the run finishes. Bicep was not deployed.
+2026-11-25. M4 is in. The golden file is `eval/golden.json` (version `1`, 29 items, k = 8). Pull-request CI runs `uv run pytest`, which scores that file on fakes. A refusal with an answer body fails, and so does a path other than the item's label. `uv run eval-run` is the manual live run. It calls Azure and writes one MLflow file-store run. It was not run. Ingest was not run again, so the blob still has no `sheet.json`. Bicep was not deployed. Nothing was committed.
 
 ## Corpus measurements
 
@@ -30,11 +30,11 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Next action
 
-Human says when to start M4. Do not start it before that. A live sheet needs `uv run ingest index`, which spends one chat call per KID. That command was not run in the M3 session.
+Human says when to start M5. Do not start it before that. A live sheet still needs `uv run ingest index`, which spends one chat call per KID. `uv run eval-run` spends about one live pass over the golden file and needs that sheet. Neither command was run in the M4 session.
 
 ## Blockers
 
-None for M3. Do not create Azure AI Search Basic. The live `sheet.json` is absent until the next ingest.
+None for M4. Do not create Azure AI Search Basic. The live `sheet.json` is absent until the next ingest. The manual eval workflow needs the Azure values as GitHub secrets before it can pass.
 
 ## Done when this project is interview-ready
 

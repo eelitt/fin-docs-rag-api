@@ -50,6 +50,18 @@ def build_chat(settings: Settings) -> OpenAIChat:
     )
 
 
+def build_ask_deps(settings: Settings) -> AskDeps:
+    blob, embedder, search = build_ingest(settings)
+    chat = build_chat(settings)
+    try:
+        sheet = json.loads(blob.get("sheet.json"))
+    except Exception as error:
+        raise DependencyFailure("sheet") from error
+    if not isinstance(sheet, dict) or not isinstance(sheet.get("funds"), list):
+        raise DependencyFailure("sheet")
+    return AskDeps(chat=chat, embedder=embedder, search=search, sheet=sheet)
+
+
 def build_app(settings: Settings):
     blob, embedder, search = build_ingest(settings)
     chat = build_chat(settings)

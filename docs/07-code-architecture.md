@@ -5,7 +5,7 @@ Updated: 2026-11-25
 
 How the Python code is split. Product behavior is in `02-product.md`. The model path is in `06-ai-architecture.md`. This file is the module map. Each module has one reason to change.
 
-Through M3 the repo has the M2 modules plus `domain/verify.py`, `domain/calculate.py`, `ports.py`, `pipeline.py`, `trace.py`, the step modules, `adapters/openai_chat.py`, `adapters/prompts.py`, `ingest/sheet.py`, `http/app.py`, and `prompts/`. Bicep is in `infra/`. Eval, telemetry, MLflow, and `frontend/` are later milestones.
+Through M4 the repo has the M3 modules plus `eval/score.py`, `eval/run.py`, `adapters/mlflow_log.py`, `eval/golden.json`, and the GitHub workflows. Telemetry and `frontend/` are later milestones.
 
 ## Rule
 
@@ -78,6 +78,7 @@ tests/
   steps/
   pipeline/
   http/
+  eval/
   integration/
 ```
 
@@ -168,6 +169,7 @@ One adapter, one external system.
 | `tests/domain/` | Chunking, stable chunk ids, ISIN, verify, calculate, and the intact cost and risk-indicator strings from one real KID | No fakes and no network |
 | `tests/steps/` | One step | A fake of the one port that step calls |
 | `tests/pipeline/` | The five question types in `02-product.md`, and a sheet-column question that does not call extract | Fake steps or fake ports, never Azure |
+| `tests/eval/` | The golden file on fakes, the path and refusal gate, and one MLflow log | Fake ports, never Azure |
 | `tests/http/` | Status codes, the error object in `02-product.md`, a 400 that does not advance the rate limit, `question_too_long`, `GET /compare` for an ISIN that is not a row, `GET /sheet` making no model call, and an envelope with a forbidden field returning 400 without a model call | The pipeline and the sheet replaced with fakes |
 | `tests/integration/` | Ingest and one live question | Azure credentials. Skipped when the credentials are absent |
 

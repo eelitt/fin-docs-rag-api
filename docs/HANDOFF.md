@@ -20,9 +20,9 @@ Then open the doc the task touches. Do not re-decide a choice marked **decided**
 
 ## Now
 
-Phase: `building`. M1, M2, and M3 passed. M3 passed on fakes. The live `sheet.json` is not in the blob yet.
+Phase: `building`. M1, M2, M3, and M4 passed. M3 and M4 passed on fakes. The live `sheet.json` is not in the blob yet. The manual live eval was not run.
 
-Next action: the human says when to start M4. Do not start M4 before that. The ongoing-cost column key is `ongoing_charge`. To put the sheet in the blob, run `uv run ingest index`. That spends one chat call per KID and writes `sheet.json` only if the run finishes. It was not run in the M3 session.
+Next action: the human says when to start M5. Do not start M5 before that. The ongoing-cost column key is `ongoing_charge`. To put the sheet in the blob, run `uv run ingest index`. That spends one chat call per KID and writes `sheet.json` only if the run finishes. `uv run eval-run` then scores `eval/golden.json` against Azure and writes one MLflow run under `mlruns/`. Neither command was run in the M4 session.
 
 The human has not asked for a commit.
 
@@ -34,8 +34,9 @@ The human has not asked for a commit.
 - The known-charge query returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`.
 - Search document key is `chunk_key` (colons replaced with underscores). The `id` field keeps the colon form.
 - A KID chunk stores every checksum-valid ISIN in that file. A report chunk stores only the ISINs in that chunk.
-- `uv run pytest`: 42 passed, 1 skipped, without Azure variables in the environment. The skip is the live hybrid query. With those variables it runs too.
+- `uv run pytest`: 52 passed, 1 skipped, without Azure variables in the environment. The skip is the live hybrid query. With those variables it runs too.
 - M3: sheet extract, quote check, `GET /sheet`, `GET /compare`, and `POST /ask`. The five question types pass on fakes. `GET /sheet` does not call the model. The column key is `ongoing_charge`.
+- M4: `eval/golden.json` (29 items, k = 8). `uv run pytest` scores it on fakes: 52 passed, 1 skipped without Azure variables. `.github/workflows/tests.yml` runs that on pull requests. `.github/workflows/eval.yml` is manual and runs `uv run eval-run`.
 - Bicep is in `infra/`. It was not deployed. The portal resources already exist. Do not deploy it. Azure CLI is not installed here.
 
 `e21c090` (`first commit`) is older than the working tree. The parser fixes, M2, and M3 are uncommitted. Trust the working tree.
@@ -43,7 +44,7 @@ The human has not asked for a commit.
 ## Do not
 
 - Implement `idea_one.md`. The decisions are in `docs/`.
-- Open M4 or later to fill out the repo. `07-code-architecture.md` is the full map. Through M3 only the files named there exist.
+- Open M5 or later to fill out the repo. `07-code-architecture.md` is the full map. Through M4 only the files named there exist.
 - Create Azure AI Search Basic, a second search service, semantic ranker, provisioned throughput, Document Intelligence, Container Registry, or SFTP.
 - Put secrets, connection strings, or keys in docs, chat, or git. They stay in `.env`.
 - Name a bank or a fund company in docs, UI, README, or code. The sources manifest is the exception. Chunk text may contain whatever the PDF prints.
