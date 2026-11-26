@@ -5,7 +5,7 @@ Updated: 2026-11-25
 
 How the Python code is split. Product behavior is in `02-product.md`. The model path is in `06-ai-architecture.md`. This file is the module map. Each module has one reason to change.
 
-Through M6 the repo has the M5 modules, `http/serve.py`, and a `Dockerfile`. `frontend/` is still later. `GET /` is a placeholder until that page exists. The trace object is built in `trace.py`. `adapters/telemetry.py` writes that object to the log, and exports it to Application Insights when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. `.github/workflows/deploy.yml` builds the image and, once `ca-fin-docs-rag` exists, updates that app on a push to `main`.
+The repo has the M5 modules, `http/serve.py`, a `Dockerfile`, `mcp_server.py`, and `frontend/`. The MCP server is a local stdio process. It is not mounted on the public app. The image build copies `frontend/dist`, and FastAPI serves that page at `GET /` when the build exists. The trace object is built in `trace.py`. `adapters/telemetry.py` writes that object to the log, and exports it to Application Insights when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. `.github/workflows/deploy.yml` builds the image and, once `ca-fin-docs-rag` exists, updates that app on a push to `main`.
 
 ## Rule
 
@@ -20,7 +20,7 @@ A module owns one job. A change to that job should land in that module and leave
 Dependency direction, and nothing back:
 
 ```
-http, ingest CLI, eval runner
+http, mcp server, ingest CLI, eval runner
         → pipeline
         → steps
         → domain, ports
@@ -61,6 +61,7 @@ src/fin_docs_rag/
   http/
     app.py
     serve.py
+  mcp_server.py
   eval/
     score.py
     run.py
@@ -152,7 +153,8 @@ One adapter, one external system.
 
 | Module | Owns | Does not |
 | --- | --- | --- |
-| `http/app.py` | Serve a placeholder at `GET /` until M8. `GET /sheet`, `GET /compare`, `POST /ask`, `GET /health`, `GET /ready`. The bodies and the `/ask` check order are in `02-product.md`. Assign `request_id` only after those checks pass. A caller other than `demo` is HTTP 401 in v1, with no secret header. Count only accepted `/ask` calls toward the process limit of 20 per 10 minutes. The next one is HTTP 429 and is not traced. Map an `Answer` to status 200 and a dependency failure to 503 `{ "error": "unavailable", "request_id": "…" }`, with the trace in the log only. Access logs omit the body | Call Azure from a route handler, branch on intent, build the sheet, log a body or a secret, or treat the request limit as a spend cap |
+| `mcp_server.py` | Local stdio MCP server. Tools `retrieve` and `compare_sentence` call `steps/retrieve.py` and `domain/calculate.py`. `compare_sentence` reads the stored sheet and fills the template. `main` builds the adapters through `composition.py` | Mount a route on the public app, accept an expression, or run a second search query |
+| `http/app.py` | Serve `frontend/dist` at `GET /` when that build exists. Otherwise serve the short disclaimer page. `GET /sheet`, `GET /compare`, `POST /ask`, `GET /health`, `GET /ready`. The bodies and the `/ask` check order are in `02-product.md`. Assign `request_id` only after those checks pass. A caller other than `demo` is HTTP 401 in v1, with no secret header. Count only accepted `/ask` calls toward the process limit of 20 per 10 minutes. The next one is HTTP 429 and is not traced. Map an `Answer` to status 200 and a dependency failure to 503 `{ "error": "unavailable", "request_id": "…" }`, with the trace in the log only. Access logs omit the body | Call Azure from a route handler, branch on intent, build the sheet, log a body or a secret, or treat the request limit as a spend cap |
 | `frontend/` | The Vite React page: sheet, comparison, follow-up, disclaimer. Calls same-origin `/sheet`, `/compare`, and `/ask` | Contain a second copy of the refusal rules, call a model, or offer the original PDF |
 | `ingest/parse_pdf.py` | PDF bytes to pages of text, including table text in reading order | Chunk, embed, upload, or call Document Intelligence |
 | `ingest/run.py` | The ingest command: parse, chunk, upload, embed, push, extract one row per KID, verify, write `sheet.json` | Answer a question |
@@ -172,6 +174,7 @@ One adapter, one external system.
 | `tests/pipeline/` | The five question types in `02-product.md`, and a sheet-column question that does not call extract | Fake steps or fake ports, never Azure |
 | `tests/eval/` | The golden file on fakes, the path and refusal gate, and one MLflow log | Fake ports, never Azure |
 | `tests/http/` | Status codes, the error object in `02-product.md`, a 400 that does not advance the rate limit, `question_too_long`, `GET /compare` for an ISIN that is not a row, `GET /sheet` making no model call, and an envelope with a forbidden field returning 400 without a model call | The pipeline and the sheet replaced with fakes |
+| `tests/mcp/` | Tool names and schemas, one local client call, and the public app having no MCP route | Fake embedder, search, and sheet. Never Azure |
 | `tests/integration/` | Ingest and one live question | Azure credentials. Skipped when the credentials are absent |
 
 A test that needs two vendor services is an integration test. A unit test that imports `openai` or `azure` is in the wrong folder.

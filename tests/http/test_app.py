@@ -52,7 +52,7 @@ def _answer() -> Answer:
     )
 
 
-def _client(sheet=None, ask=None, now=None, ping=None, write_trace=None):
+def _client(sheet=None, ask=None, now=None, ping=None, write_trace=None, static_dir=None):
     calls = {"n": 0}
 
     def read_sheet():
@@ -70,16 +70,36 @@ def _client(sheet=None, ask=None, now=None, ping=None, write_trace=None):
         ask=ask or default_ask,
         now=now or Clock(),
         write_trace=write_trace,
+        static_dir=static_dir,
     )
     return app, calls
 
 
-def test_home_is_a_placeholder():
+def test_home_without_a_build_keeps_the_disclaimer():
     app, calls = _client()
     with TestClient(app) as client:
         response = client.get("/")
     assert response.status_code == 200
     assert "Not investment advice" in response.text
+    assert calls["n"] == 0
+
+
+def test_built_page_is_served_beside_the_api(tmp_path):
+    (tmp_path / "index.html").write_text("<!doctype html><p>demo page</p>", encoding="utf-8")
+    assets = tmp_path / "assets"
+    assets.mkdir()
+    (assets / "app.js").write_text("console.log(1)", encoding="utf-8")
+    app, calls = _client(static_dir=tmp_path)
+    with TestClient(app) as client:
+        home = client.get("/")
+        script = client.get("/assets/app.js")
+        sheet = client.get("/sheet")
+    assert home.status_code == 200
+    assert "demo page" in home.text
+    assert script.status_code == 200
+    assert script.text == "console.log(1)"
+    assert sheet.status_code == 200
+    assert sheet.json()["funds"][0]["isin"] == "FI0008804729"
     assert calls["n"] == 0
 
 

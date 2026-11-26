@@ -1,6 +1,7 @@
 .git
 .venv
 .env
+node_modules
 data
 docs
 tests
@@ -9,3 +10,4 @@ mlartifacts
 **/__pycache__
 .pytest_cache
 **/*.pyc
+frontend/dist

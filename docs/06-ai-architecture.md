@@ -121,7 +121,7 @@ A checked present value is stored as `stated`. `absent` is stored as `not_stated
 
 `GET /compare` reads the two ongoing-cost cells for `isin_a` and `isin_b`. When both are `stated` numbers, Python computes the difference and fills an English template: the two figures, the holding period each figure assumes, their citations, and the difference in percentage points. If the holding periods differ, both periods appear and the sentence does not rank the funds. The template does not say which fund to choose. If either cell is `not_stated` or `not_extracted`, or either ISIN is not a row, the sentence says so and does not invent a difference. The response body is in `02-product.md`. A follow-up comparison uses the same template on the router's `comparison_field`, in percentage points, years, or risk-indicator steps. The page shows the two product sentences from `GET /sheet`.
 
-The same pure function is what the later MCP server exposes. There is no general calculator the model can call with its own expression. A follow-up comparison of two sheet rows uses this function and does not call extract again.
+The same pure function is what the MCP server exposes. There is no general calculator the model can call with its own expression. A follow-up comparison of two sheet rows uses this function and does not call extract again.
 
 ## Abstain and refuse
 

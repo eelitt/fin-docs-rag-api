@@ -3,9 +3,11 @@ import logging
 import time
 import uuid
 from collections.abc import Callable
+from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from fin_docs_rag.domain.calculate import ongoing_comparison
 from fin_docs_rag.domain.isin import is_isin
@@ -16,6 +18,7 @@ _FIELDS = {"request_id", "caller", "instrument_ids", "question"}
 _LIMIT = 20
 _WINDOW_S = 600
 logger = logging.getLogger(__name__)
+_AUTO = object()
 _PAGE = """<!doctype html>
 <meta charset="utf-8">
 <title>fin-docs-rag</title>
@@ -31,14 +34,28 @@ def create_app(
     ask: Callable[[RequestEnvelope], Answer],
     now: Callable[[], float] = time.monotonic,
     write_trace: Callable[[dict], None] | None = None,
+    static_dir: Path | None | object = _AUTO,
 ) -> FastAPI:
     record = write_trace or _log_trace
     app = FastAPI()
     accepted: list[float] = []
+    page = _built_page() if static_dir is _AUTO else static_dir
 
-    @app.get("/")
-    def home() -> HTMLResponse:
-        return HTMLResponse(_PAGE)
+    if isinstance(page, Path) and (page / "index.html").is_file():
+        index = page / "index.html"
+
+        @app.get("/")
+        def home() -> FileResponse:
+            return FileResponse(index)
+
+        assets = page / "assets"
+        if assets.is_dir():
+            app.mount("/assets", StaticFiles(directory=assets), name="assets")
+    else:
+
+        @app.get("/")
+        def home() -> HTMLResponse:
+            return HTMLResponse(_PAGE)
 
     @app.get("/health")
     def health() -> dict:
@@ -163,6 +180,13 @@ def _envelope(body: dict) -> RequestEnvelope:
 def _record(write_trace: Callable[[dict], None], error: DependencyFailure) -> None:
     if error.trace is not None:
         write_trace(error.trace)
+
+
+def _built_page() -> Path | None:
+    page = Path(__file__).resolve().parents[3] / "frontend" / "dist"
+    if (page / "index.html").is_file():
+        return page
+    return None
 
 
 def _log_trace(trace: dict) -> None:

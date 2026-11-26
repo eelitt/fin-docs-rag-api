@@ -47,7 +47,7 @@ Two paths. The fact sheet is built once, at ingest. A question is one Python fun
 
 `ungrounded` is only the failed check in step 7. An empty grade result is `not_in_corpus`.
 
-The question path is one Python function. It is not several chat models choosing tools. MCP, later, exposes the same search function and `domain/calculate.py`.
+The question path is one Python function. It is not several chat models choosing tools. MCP exposes the same search function and `domain/calculate.py`.
 
 ## Deploy and demo
 
