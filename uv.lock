@@ -786,6 +786,7 @@ dependencies = [
     { name = "openai" },
     { name = "pymupdf" },
     { name = "tiktoken" },
+    { name = "uvicorn" },
 ]
 
 [package.dev-dependencies]
@@ -805,6 +806,7 @@ requires-dist = [
     { name = "openai", specifier = ">=1.60" },
     { name = "pymupdf", specifier = ">=1.24" },
     { name = "tiktoken", specifier = ">=0.7" },
+    { name = "uvicorn", specifier = ">=0.54.0" },
 ]
 
 [package.metadata.requires-dev]

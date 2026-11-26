@@ -27,6 +27,9 @@ resource foundry 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
     customSubDomainName: foundryName
     publicNetworkAccess: 'Enabled'
     disableLocalAuth: false
+    networkAcls: {
+      defaultAction: 'Allow'
+    }
   }
 }
 
@@ -48,6 +51,7 @@ resource chat 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
 
 resource embedding 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
   parent: foundry
+  dependsOn: [chat]
   name: embeddingDeploymentName
   sku: {
     name: 'GlobalStandard'
@@ -122,7 +126,6 @@ resource vault 'Microsoft.KeyVault/vaults@2023-07-01' = {
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
     publicNetworkAccess: 'Enabled'
-    enablePurgeProtection: false
   }
 }
 
@@ -135,7 +138,7 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
     }
     retentionInDays: 30
     workspaceCapping: {
-      dailyQuotaGb: 0.1
+      dailyQuotaGb: json('0.1')
     }
   }
 }
@@ -159,7 +162,7 @@ resource appInsightsCap 'Microsoft.Insights/components/currentBillingFeatures@20
       'Basic'
     ]
     DataVolumeCap: {
-      Cap: 0.1
+      Cap: json('0.1')
       StopSendNotificationWhenHitCap: true
     }
   }
