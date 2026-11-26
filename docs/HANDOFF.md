@@ -20,11 +20,9 @@ Then open the doc the task touches. Do not re-decide a choice marked **decided**
 
 ## Now
 
-Phase: `building`. M1, M2, M3, M4, and M5 passed. M3, M4, and M5 passed on fakes. M6 is implemented and not deployed. There is no public URL yet. `sheet.json` is in the blob. The manual live eval was not run.
+Phase: `deployed`. M1, M2, M3, M4, and M5 passed. M3, M4, and M5 passed on fakes. M6 is deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /health` and `GET /ready` returned status ok. The scripted `POST /ask` returned HTTP 200 and said the ongoing cost of `FI0008804729` was not extracted. `sheet.json` is in the blob. Every `ongoing_charge` cell is `not_extracted`. The manual live eval was not run.
 
-Next action: the human continues gitignored `docs/m6-setup.md` at "Image, then the app". The GitHub deploy identity exists. `sheet.json` is in the blob. Do not start M7. The ongoing-cost column key is `ongoing_charge`. `uv run eval-run` scores `eval/golden.json` against Azure and writes one MLflow run under `mlruns/`. It has not been run.
-
-The human has not asked for a commit.
+Next action: do not start M7. A fresh sheet extract is what would fill the cost cells. The ongoing-cost column key is `ongoing_charge`. `uv run eval-run` scores `eval/golden.json` against Azure and writes one MLflow run under `mlruns/`. It has not been run. It still needs the model endpoints as GitHub secrets.
 
 ## Done
 
@@ -37,12 +35,12 @@ The human has not asked for a commit.
 - `uv run pytest`: 58 passed, 1 skipped, without Azure variables in the environment. The skip is the live hybrid query. With those variables it runs too.
 - M3: sheet extract, quote check, `GET /sheet`, `GET /compare`, and `POST /ask`. The five question types pass on fakes. `GET /sheet` does not call the model. The column key is `ongoing_charge`.
 - M4: `eval/golden.json` (29 items, k = 8). `uv run pytest` scores it on fakes. `.github/workflows/tests.yml` runs that on pull requests. `.github/workflows/eval.yml` is manual and runs `uv run eval-run`. GitHub's last pytest run failed because the PDFs are gitignored and the workflow does not download them.
-- M5: one root span per accepted `/ask`, one child per model call. The log gets that object. Application Insights gets it only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. A rejected envelope is not traced. A schema retry stores both attempts on the child. Bicep names `log-fin-docs-rag` and `appi-fin-docs-rag`, daily cap 0.1 GB. Not deployed. The pasted live trace is M8.
-- M6: `Dockerfile`, placeholder `GET /`, and keyless calls when the API keys are unset. `id-fin-docs-rag-web` is the app identity. `id-fin-docs-rag-ingest` can write and is not on the app. `.github/workflows/deploy.yml` pushes `ghcr.io/eelitt/fin-docs-rag-api:<sha>` and updates `ca-fin-docs-rag` after that app exists. No Azure Container Registry. Teardown is one `az group delete` in `azure_setup.md`. Not deployed.
+- M5: one root span per accepted `/ask`, one child per model call. The log gets that object. Application Insights gets it only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. A rejected envelope is not traced. A schema retry stores both attempts on the child. Bicep names `log-fin-docs-rag` and `appi-fin-docs-rag`, daily cap 0.1 GB. Those resources exist. The pasted live trace is M8.
+- M6: `Dockerfile`, placeholder `GET /`, and keyless calls when the API keys are unset. `id-fin-docs-rag-web` is the app identity. `id-fin-docs-rag-ingest` can write and is not on the app. `.github/workflows/deploy.yml` pushes `ghcr.io/eelitt/fin-docs-rag-api:<sha>` and updates `ca-fin-docs-rag`. No Azure Container Registry. Teardown is one `az group delete` in `azure_setup.md`. Deployed on 2026-11-26. The image installs `uvicorn`. The GitHub OIDC subject includes the owner and repository ids.
 - Root `README.md` tells a recruiter what the project is. It is not the M8 README. Run steps, deploy, and live eval numbers stay out of it until M8.
-- Bicep is in `infra/`. It was not deployed. A deploy also updates the portal resources that already exist, including search authentication. The human does that from `docs/m6-setup.md`. Azure CLI 2.93.0 is installed. A new terminal is needed before `az` is on `PATH`.
+- Bicep is in `infra/` and has been deployed to `rg-fin-docs-rag`. A later deploy updates the portal resources that already exist, including search authentication and the Foundry account. Azure CLI 2.93.0 is installed. A new terminal is needed before `az` is on `PATH`.
 
-`e21c090` (`first commit`) is older than the working tree. The parser fixes, M2, M3, M4, M5, M6, and the root `README.md` are uncommitted. Trust the working tree.
+`4c0358a` (`Fix the container start and the Bicep deploy.`) is the image the app was checked against. `STATUS.md` records the public URL. Trust `STATUS.md` over an older note that says the app is not deployed.
 
 ## Do not
 

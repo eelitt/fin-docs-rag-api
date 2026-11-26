@@ -4,9 +4,9 @@ Updated: 2026-11-26
 
 ## Phase
 
-`building`
+`deployed`
 
-M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes. M4 passed on fakes: `eval/golden.json` has 29 items, and `uv run pytest` scores that file on fakes. The live hybrid query is skipped when Azure credentials are not in the environment. With those credentials it runs too. The manual live eval was not run. M5 passed on fakes: an accepted `/ask` writes the trace object to the log, a rejected envelope does not, and the same fields export to Application Insights only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. M6 is implemented and not deployed. There is no public URL yet. The human steps are in gitignored `docs/m6-setup.md`.
+M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes. M4 passed on fakes: `eval/golden.json` has 29 items, and `uv run pytest` scores that file on fakes. The live hybrid query is skipped when Azure credentials are not in the environment. With those credentials it runs too. The manual live eval was not run. M5 passed on fakes: an accepted `/ask` writes the trace object to the log, a rejected envelope does not, and the same fields export to Application Insights only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. M6 is deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /health` and `GET /ready` returned status ok. `POST /ask` for the ongoing cost of `FI0008804729` returned HTTP 200 and the sentence that the cost was not extracted. Every `ongoing_charge` cell in the live sheet is `not_extracted`. The setup notes are in gitignored `docs/m6-setup.md`.
 
 ## Decision
 
@@ -16,7 +16,7 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Last session
 
-2026-11-25. M6 code is in: `Dockerfile`, placeholder `GET /`, keyless adapters for the web identity, Container Apps in `infra/resources.bicep`, and `.github/workflows/deploy.yml`. Bicep was not deployed. The URL is not recorded because the app does not exist yet. The human setup is `docs/m6-setup.md`. Ingest has run and `sheet.json` is in the blob. Nothing was committed.
+2026-11-26. The group deployment created the container app, the two identities, and the capped log and Application Insights resources. The running image is `ghcr.io/eelitt/fin-docs-rag-api:4c0358ab339a74809b612e4eb66f90f6c6e389ba`. The page at `/` is still a placeholder.
 
 ## Corpus measurements
 
@@ -30,11 +30,11 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Next action
 
-Human continues `docs/m6-setup.md` at "Image, then the app". `sheet.json` is in the blob. The deploy identity exists and is not a subscription owner. Do not start M7. `uv run eval-run` still needs the model endpoints as GitHub secrets for the manual workflow.
+Do not start M7. The live sheet has 22 rows and every `ongoing_charge` cell is `not_extracted`, so the scripted question does not return a figure. `uv run eval-run` still needs the model endpoints as GitHub secrets for the manual workflow.
 
 ## Blockers
 
-Bicep matches the live Foundry deployments and has not been deployed. Do not create Azure AI Search Basic or Azure Container Registry. `sheet.json` is in the blob. Pull-request pytest still fails on GitHub because `data/pdfs/` is gitignored and the workflow does not download the PDFs.
+Do not create Azure AI Search Basic or Azure Container Registry. `sheet.json` is in the blob and its cost cells are `not_extracted`. Pull-request pytest still fails on GitHub because `data/pdfs/` is gitignored and the workflow does not download the PDFs.
 
 ## Done when this project is interview-ready
 

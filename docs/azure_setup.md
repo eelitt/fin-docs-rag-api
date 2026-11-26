@@ -114,9 +114,9 @@ Copy endpoints from the portal into a local `.env` that is not committed. Do not
 
 A playground message in the Foundry project is enough to prove the chat deployment. The embedding deployment has no playground. Ingest uses its endpoint and deployment name.
 
-## Declared, not created yet
+## Created on 2026-11-26
 
-Do not create a second copy of these in the portal. The human deploy steps are in `docs/m6-setup.md`, which is gitignored.
+Do not create a second copy of these in the portal. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. The setup notes are in `docs/m6-setup.md`, which is gitignored.
 
 - Log Analytics workspace `log-fin-docs-rag` and Application Insights `appi-fin-docs-rag`, with a daily ingestion cap of 0.1 GB on the workspace and on the component. GenAI content capture stays off: the exporter sends the span fields only, and the process sets `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` to `false`.
 - Container Apps environment `cae-fin-docs-rag` on the Consumption plan, and one app named `ca-fin-docs-rag` with minimum replicas 0 and maximum 1. Liveness is `GET /health`. Readiness is `GET /ready`. `id-fin-docs-rag-web` is the only identity on the app. It can read the blob, query the index, and call the two model deployments. It cannot write the blob or the index. `id-fin-docs-rag-ingest` can write and is not attached to the app. Neither identity is a subscription owner. The container has no API keys. Do not add a second host for the frontend. The image is a public `ghcr.io` package, not an Azure Container Registry.
