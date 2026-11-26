@@ -1,6 +1,6 @@
 # Handoff
 
-Updated: 2026-11-25
+Updated: 2026-11-26
 
 This file briefs the next agent. It is not the coding rules.
 
@@ -20,9 +20,9 @@ Then open the doc the task touches. Do not re-decide a choice marked **decided**
 
 ## Now
 
-Phase: `building`. M1, M2, M3, and M4 passed. M3 and M4 passed on fakes. The live `sheet.json` is not in the blob yet. The manual live eval was not run.
+Phase: `building`. M1, M2, M3, M4, and M5 passed. M3, M4, and M5 passed on fakes. M6 is implemented and not deployed. There is no public URL yet. `sheet.json` is in the blob. The manual live eval was not run.
 
-Next action: the human says when to start M5. Do not start M5 before that. The ongoing-cost column key is `ongoing_charge`. To put the sheet in the blob, run `uv run ingest index`. That spends one chat call per KID and writes `sheet.json` only if the run finishes. `uv run eval-run` then scores `eval/golden.json` against Azure and writes one MLflow run under `mlruns/`. Neither command was run in the M4 session.
+Next action: the human continues gitignored `docs/m6-setup.md` at "Image, then the app". The GitHub deploy identity exists. `sheet.json` is in the blob. Do not start M7. The ongoing-cost column key is `ongoing_charge`. `uv run eval-run` scores `eval/golden.json` against Azure and writes one MLflow run under `mlruns/`. It has not been run.
 
 The human has not asked for a commit.
 
@@ -34,18 +34,20 @@ The human has not asked for a commit.
 - The known-charge query returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`.
 - Search document key is `chunk_key` (colons replaced with underscores). The `id` field keeps the colon form.
 - A KID chunk stores every checksum-valid ISIN in that file. A report chunk stores only the ISINs in that chunk.
-- `uv run pytest`: 52 passed, 1 skipped, without Azure variables in the environment. The skip is the live hybrid query. With those variables it runs too.
+- `uv run pytest`: 58 passed, 1 skipped, without Azure variables in the environment. The skip is the live hybrid query. With those variables it runs too.
 - M3: sheet extract, quote check, `GET /sheet`, `GET /compare`, and `POST /ask`. The five question types pass on fakes. `GET /sheet` does not call the model. The column key is `ongoing_charge`.
-- M4: `eval/golden.json` (29 items, k = 8). `uv run pytest` scores it on fakes: 52 passed, 1 skipped without Azure variables. `.github/workflows/tests.yml` runs that on pull requests. `.github/workflows/eval.yml` is manual and runs `uv run eval-run`.
+- M4: `eval/golden.json` (29 items, k = 8). `uv run pytest` scores it on fakes. `.github/workflows/tests.yml` runs that on pull requests. `.github/workflows/eval.yml` is manual and runs `uv run eval-run`. GitHub's last pytest run failed because the PDFs are gitignored and the workflow does not download them.
+- M5: one root span per accepted `/ask`, one child per model call. The log gets that object. Application Insights gets it only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. A rejected envelope is not traced. A schema retry stores both attempts on the child. Bicep names `log-fin-docs-rag` and `appi-fin-docs-rag`, daily cap 0.1 GB. Not deployed. The pasted live trace is M8.
+- M6: `Dockerfile`, placeholder `GET /`, and keyless calls when the API keys are unset. `id-fin-docs-rag-web` is the app identity. `id-fin-docs-rag-ingest` can write and is not on the app. `.github/workflows/deploy.yml` pushes `ghcr.io/eelitt/fin-docs-rag-api:<sha>` and updates `ca-fin-docs-rag` after that app exists. No Azure Container Registry. Teardown is one `az group delete` in `azure_setup.md`. Not deployed.
 - Root `README.md` tells a recruiter what the project is. It is not the M8 README. Run steps, deploy, and live eval numbers stay out of it until M8.
-- Bicep is in `infra/`. It was not deployed. The portal resources already exist. Do not deploy it. Azure CLI is not installed here.
+- Bicep is in `infra/`. It was not deployed. A deploy also updates the portal resources that already exist, including search authentication. The human does that from `docs/m6-setup.md`. Azure CLI 2.93.0 is installed. A new terminal is needed before `az` is on `PATH`.
 
-`e21c090` (`first commit`) is older than the working tree. The parser fixes, M2, and M3 are uncommitted. Trust the working tree.
+`e21c090` (`first commit`) is older than the working tree. The parser fixes, M2, M3, M4, M5, M6, and the root `README.md` are uncommitted. Trust the working tree.
 
 ## Do not
 
 - Implement `idea_one.md`. The decisions are in `docs/`.
-- Open M5 or later to fill out the repo. `07-code-architecture.md` is the full map. Through M4 only the files named there exist.
+- Open M7 or later to fill out the repo. `07-code-architecture.md` is the full map. Through M6, `frontend/` is still later. `GET /` stays a placeholder until M8.
 - Create Azure AI Search Basic, a second search service, semantic ranker, provisioned throughput, Document Intelligence, Container Registry, or SFTP.
 - Put secrets, connection strings, or keys in docs, chat, or git. They stay in `.env`.
 - Name a bank or a fund company in docs, UI, README, or code. The sources manifest is the exception. Chunk text may contain whatever the PDF prints.

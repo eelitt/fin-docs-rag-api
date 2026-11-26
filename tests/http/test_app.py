@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 from fastapi.testclient import TestClient
@@ -51,7 +52,7 @@ def _answer() -> Answer:
     )
 
 
-def _client(sheet=None, ask=None, now=None, ping=None):
+def _client(sheet=None, ask=None, now=None, ping=None, write_trace=None):
     calls = {"n": 0}
 
     def read_sheet():
@@ -68,8 +69,18 @@ def _client(sheet=None, ask=None, now=None, ping=None):
         ping=ping or (lambda: None),
         ask=ask or default_ask,
         now=now or Clock(),
+        write_trace=write_trace,
     )
     return app, calls
+
+
+def test_home_is_a_placeholder():
+    app, calls = _client()
+    with TestClient(app) as client:
+        response = client.get("/")
+    assert response.status_code == 200
+    assert "Not investment advice" in response.text
+    assert calls["n"] == 0
 
 
 def test_health_does_not_read_the_sheet_and_ready_does():
@@ -164,15 +175,43 @@ def test_a_rejected_ask_does_not_advance_the_rate_limit():
 
 def test_dependency_failure_is_unavailable_and_hides_the_trace():
     request_id = str(uuid.uuid4())
+    written = []
 
     def ask(envelope):
         error = DependencyFailure("timeout")
         error.trace = {"request_id": envelope.request_id, "hidden": True}
         raise error
 
-    app, _calls = _client(ask=ask)
+    app, _calls = _client(ask=ask, write_trace=written.append)
     with TestClient(app) as client:
         response = client.post("/ask", json={"question": "hi", "request_id": request_id})
     assert response.status_code == 503
     assert response.json() == {"error": "unavailable", "request_id": request_id}
     assert "hidden" not in response.text
+    assert written == [{"request_id": request_id, "hidden": True}]
+
+
+def test_an_accepted_ask_is_traced_and_a_rejected_one_is_not(caplog):
+    written = []
+    app, _calls = _client(write_trace=written.append)
+    with TestClient(app) as client:
+        rejected = client.post("/ask", json={"question": "hi", "email": "a@b.c"})
+        limited = []
+        for _index in range(20):
+            limited.append(client.post("/ask", json={"question": "hi"}))
+        again = client.post("/ask", json={"question": "should I buy this"})
+    assert rejected.status_code == 400
+    assert again.status_code == 429
+    assert all(item.status_code == 200 for item in limited)
+    assert len(written) == 20
+    assert written[0] == {"children": []}
+    assert "should I buy this" not in str(written)
+    caplog.set_level(logging.INFO)
+    app, _calls = _client()
+    with TestClient(app) as client:
+        with caplog.at_level(logging.INFO, logger="fin_docs_rag.http.app"):
+            response = client.post("/ask", json={"question": "where is the cost"})
+    assert response.status_code == 200
+    assert response.json()["trace"] == {"children": []}
+    assert '{"children": []}' in caplog.text
+    assert "where is the cost" not in caplog.text

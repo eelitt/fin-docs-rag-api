@@ -1,0 +1,39 @@
+name: deploy
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: names
+        run: echo "image=ghcr.io/${GITHUB_REPOSITORY,,}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.names.outputs.image }}
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - uses: azure/cli@v2
+        with:
+          inlineScript: |
+            if az containerapp show --name ca-fin-docs-rag --resource-group rg-fin-docs-rag --output none; then
+              az containerapp update --name ca-fin-docs-rag --resource-group rg-fin-docs-rag --image ${{ steps.names.outputs.image }} --output none
+            else
+              echo "ca-fin-docs-rag does not exist yet. The image is ${{ steps.names.outputs.image }}. Create the app with the command in docs/m6-setup.md, then rerun this workflow."
+              exit 1
+            fi

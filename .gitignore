@@ -9,3 +9,5 @@ __pycache__/
 *.egg-info/
 dist/
 CLAUDE.md
+pytest_github_01.md
+docs/m6-setup.md

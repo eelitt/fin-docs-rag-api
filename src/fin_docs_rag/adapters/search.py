@@ -25,8 +25,9 @@ _UPLOAD_BATCH = 50
 
 
 class AzureSearch:
-    def __init__(self, endpoint: str, api_key: str, index_name: str) -> None:
-        credential = AzureKeyCredential(api_key)
+    def __init__(self, endpoint: str, credential: str | object, index_name: str) -> None:
+        if isinstance(credential, str):
+            credential = AzureKeyCredential(credential)
         self._index_name = index_name
         self._indexes = SearchIndexClient(endpoint, credential)
         self._docs = SearchClient(endpoint, index_name, credential)
@@ -74,7 +75,9 @@ class AzureSearch:
         ]
 
     def ping(self) -> None:
-        self._indexes.get_index(self._index_name)
+        # Document query: Search Index Data Reader cannot call get_index.
+        results = self._docs.search(search_text="*", top=1, select=["id"])
+        next(iter(results), None)
 
 
 def chunk_key(chunk_id: str) -> str:

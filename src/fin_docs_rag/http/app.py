@@ -1,10 +1,11 @@
+import json
 import logging
 import time
 import uuid
 from collections.abc import Callable
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 from fin_docs_rag.domain.calculate import ongoing_comparison
 from fin_docs_rag.domain.isin import is_isin
@@ -15,6 +16,12 @@ _FIELDS = {"request_id", "caller", "instrument_ids", "question"}
 _LIMIT = 20
 _WINDOW_S = 600
 logger = logging.getLogger(__name__)
+_PAGE = """<!doctype html>
+<meta charset="utf-8">
+<title>fin-docs-rag</title>
+<p>Research aid over public fund documents. Not investment advice, and not a product of any bank or fund company.</p>
+<p>The fact sheet page is not here yet.</p>
+"""
 
 
 def create_app(
@@ -23,9 +30,15 @@ def create_app(
     ping: Callable[[], None],
     ask: Callable[[RequestEnvelope], Answer],
     now: Callable[[], float] = time.monotonic,
+    write_trace: Callable[[dict], None] | None = None,
 ) -> FastAPI:
+    record = write_trace or _log_trace
     app = FastAPI()
     accepted: list[float] = []
+
+    @app.get("/")
+    def home() -> HTMLResponse:
+        return HTMLResponse(_PAGE)
 
     @app.get("/health")
     def health() -> dict:
@@ -45,7 +58,7 @@ def create_app(
         try:
             return read_sheet()
         except DependencyFailure as error:
-            _log_trace(error)
+            _record(record, error)
             return JSONResponse(status_code=503, content={"error": "unavailable"})
 
     @app.get("/compare")
@@ -56,7 +69,7 @@ def create_app(
             document = read_sheet()
             return ongoing_comparison(document, isin_a, isin_b)
         except DependencyFailure as error:
-            _log_trace(error)
+            _record(record, error)
             return JSONResponse(status_code=503, content={"error": "unavailable"})
 
     @app.post("/ask")
@@ -70,13 +83,15 @@ def create_app(
             return JSONResponse(status_code=429, content={"error": "rate_limited"})
         envelope = _envelope(body)
         try:
-            return ask(envelope).to_dict()
+            answer = ask(envelope)
         except DependencyFailure as error:
-            _log_trace(error)
+            _record(record, error)
             return JSONResponse(
                 status_code=503,
                 content={"error": "unavailable", "request_id": envelope.request_id},
             )
+        record(answer.trace)
+        return answer.to_dict()
 
     return app
 
@@ -145,6 +160,10 @@ def _envelope(body: dict) -> RequestEnvelope:
     return RequestEnvelope(request_id, caller, instrument_ids, question)
 
 
-def _log_trace(error: DependencyFailure) -> None:
+def _record(write_trace: Callable[[dict], None], error: DependencyFailure) -> None:
     if error.trace is not None:
-        logger.info("%s", error.trace)
+        write_trace(error.trace)
+
+
+def _log_trace(trace: dict) -> None:
+    logger.info("%s", json.dumps(trace, ensure_ascii=False))

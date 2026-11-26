@@ -1,6 +1,7 @@
 import json
 import threading
 import time
+from collections.abc import Callable
 from typing import Literal
 
 from openai import APIConnectionError, APIStatusError, APITimeoutError, AzureOpenAI
@@ -146,15 +147,23 @@ _SCHEMAS = {
 
 
 class OpenAIChat:
-    def __init__(self, endpoint: str, api_key: str, deployment: str, prompts: PromptSource) -> None:
+    def __init__(
+        self,
+        endpoint: str,
+        api_key: str,
+        deployment: str,
+        prompts: PromptSource,
+        token_provider: Callable[[], str] | None = None,
+    ) -> None:
         self._deployment = deployment
         self._prompts = prompts
         self._local = threading.local()
+        auth = {"api_key": api_key} if api_key else {"azure_ad_token_provider": token_provider}
         self._client = AzureOpenAI(
             azure_endpoint=endpoint,
-            api_key=api_key,
             api_version="2024-10-21",
             timeout=60.0,
+            **auth,
         )
 
     @property
@@ -169,7 +178,10 @@ class OpenAIChat:
         model = _MODELS[prompt_id]
         prompt = self._prompts.load(prompt_id)
         started = time.perf_counter()
+        self._local.records = []
+        response = None
         for attempt in (1, 2):
+            attempt_started = time.perf_counter()
             try:
                 response = self._client.chat.completions.create(
                     model=self._deployment,
@@ -186,26 +198,36 @@ class OpenAIChat:
                 content = response.choices[0].message.content or ""
                 parsed = model.model_validate(json.loads(content))
             except (APITimeoutError, APIConnectionError, APIStatusError) as error:
-                self._save(prompt_id, started, attempt, None)
+                self._save(prompt_id, started, attempt_started, attempt, None)
                 kind = "timeout" if isinstance(error, APITimeoutError) else "unavailable"
                 raise DependencyFailure(kind) from error
             except (json.JSONDecodeError, ValidationError) as error:
-                self._save(prompt_id, started, attempt, None)
+                self._save(prompt_id, started, attempt_started, attempt, response)
                 if attempt == 2:
                     raise DependencyFailure("schema") from error
                 continue
-            self._save(prompt_id, started, attempt, response)
+            self._save(prompt_id, started, attempt_started, attempt, response)
             return parsed.model_dump()
         raise DependencyFailure("schema")
 
-    def _save(self, prompt_id: str, started: float, attempts: int, response) -> None:
+    def _save(self, prompt_id: str, started: float, attempt_started: float, attempts: int, response) -> None:
         usage = getattr(response, "usage", None) if response is not None else None
+        records = list(getattr(self._local, "records", []))
+        records.append(
+            (
+                int((time.perf_counter() - attempt_started) * 1000),
+                getattr(usage, "prompt_tokens", 0) or 0,
+                getattr(usage, "completion_tokens", 0) or 0,
+            )
+        )
+        self._local.records = records
         self.last_call = ModelCall(
             prompt_id=prompt_id,
             deployment=self._deployment,
             model_version=getattr(response, "model", "") or "",
             latency_ms=int((time.perf_counter() - started) * 1000),
-            input_tokens=getattr(usage, "prompt_tokens", 0) or 0,
-            output_tokens=getattr(usage, "completion_tokens", 0) or 0,
+            input_tokens=sum(item[1] for item in records),
+            output_tokens=sum(item[2] for item in records),
             attempts=attempts,
+            attempt_records=tuple(records),
         )

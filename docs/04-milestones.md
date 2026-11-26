@@ -74,8 +74,7 @@ Check: the tool names and schemas match the functions the API uses. No second im
 
 - `frontend/` is the Vite React app from `02-product.md`: the fact sheet, a two-fund comparison, the follow-up box, citations, refusal, trace, and the disclaimer.
 - The production image builds those static files, and the same Container App serves them at `GET /`. No second host.
-- README: what it is, how to run locally, how to deploy, eval numbers from the latest live run, cost note, and a short map onto `01-gap-map.md`.
-- Disclaimer: research aid over public documents, not investment advice, and not a product of any bank or fund company.
+- README: the root `README.md` already says what the project is and carries the disclaimer. Add how to run locally, how to deploy, eval numbers from the latest live run, a cost note, and a short map onto `01-gap-map.md`. Keep the disclaimer: research aid over public documents, not investment advice, and not a product of any bank or fund company.
 
 Check: a new reader can run the demo from the README without this `docs/` folder.
 

@@ -51,6 +51,11 @@ def _child(name: str, call: ModelCall) -> dict:
         "input_tokens": call.input_tokens,
         "output_tokens": call.output_tokens,
     }
-    if call.attempts != 1:
+    if len(call.attempt_records) > 1:
+        body["attempts"] = [
+            {"latency_ms": latency, "input_tokens": inputs, "output_tokens": outputs}
+            for latency, inputs, outputs in call.attempt_records
+        ]
+    elif call.attempts != 1:
         body["attempts"] = call.attempts
     return body

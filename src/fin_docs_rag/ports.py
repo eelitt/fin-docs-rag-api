@@ -19,6 +19,7 @@ class ModelCall:
     input_tokens: int
     output_tokens: int
     attempts: int = 1
+    attempt_records: tuple[tuple[int, int, int], ...] = ()
 
 
 class Chat(Protocol):
@@ -45,3 +46,7 @@ class BlobStore(Protocol):
     def put(self, name: str, data: bytes) -> None: ...
 
     def get(self, name: str) -> bytes: ...
+
+
+class Tracer(Protocol):
+    def write(self, trace: dict) -> None: ...

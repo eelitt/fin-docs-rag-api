@@ -5,7 +5,7 @@ Updated: 2026-11-25
 
 How the Python code is split. Product behavior is in `02-product.md`. The model path is in `06-ai-architecture.md`. This file is the module map. Each module has one reason to change.
 
-Through M4 the repo has the M3 modules plus `eval/score.py`, `eval/run.py`, `adapters/mlflow_log.py`, `eval/golden.json`, and the GitHub workflows. Telemetry and `frontend/` are later milestones.
+Through M6 the repo has the M5 modules, `http/serve.py`, and a `Dockerfile`. `frontend/` is still later. `GET /` is a placeholder until that page exists. The trace object is built in `trace.py`. `adapters/telemetry.py` writes that object to the log, and exports it to Application Insights when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. `.github/workflows/deploy.yml` builds the image and, once `ca-fin-docs-rag` exists, updates that app on a push to `main`.
 
 ## Rule
 
@@ -60,6 +60,7 @@ src/fin_docs_rag/
     run.py
   http/
     app.py
+    serve.py
   eval/
     score.py
     run.py
@@ -151,7 +152,7 @@ One adapter, one external system.
 
 | Module | Owns | Does not |
 | --- | --- | --- |
-| `http/app.py` | Serve the built React files at `GET /`. `GET /sheet`, `GET /compare`, `POST /ask`, `GET /health`, `GET /ready`. The bodies and the `/ask` check order are in `02-product.md`. Assign `request_id` only after those checks pass. A caller other than `demo` is HTTP 401 in v1, with no secret header. Count only accepted `/ask` calls toward the process limit of 20 per 10 minutes. The next one is HTTP 429 and is not traced. Map an `Answer` to status 200 and a dependency failure to 503 `{ "error": "unavailable", "request_id": "…" }`, with the trace in the log only. Access logs omit the body | Call Azure from a route handler, branch on intent, build the sheet, log a body or a secret, or treat the request limit as a spend cap |
+| `http/app.py` | Serve a placeholder at `GET /` until M8. `GET /sheet`, `GET /compare`, `POST /ask`, `GET /health`, `GET /ready`. The bodies and the `/ask` check order are in `02-product.md`. Assign `request_id` only after those checks pass. A caller other than `demo` is HTTP 401 in v1, with no secret header. Count only accepted `/ask` calls toward the process limit of 20 per 10 minutes. The next one is HTTP 429 and is not traced. Map an `Answer` to status 200 and a dependency failure to 503 `{ "error": "unavailable", "request_id": "…" }`, with the trace in the log only. Access logs omit the body | Call Azure from a route handler, branch on intent, build the sheet, log a body or a secret, or treat the request limit as a spend cap |
 | `frontend/` | The Vite React page: sheet, comparison, follow-up, disclaimer. Calls same-origin `/sheet`, `/compare`, and `/ask` | Contain a second copy of the refusal rules, call a model, or offer the original PDF |
 | `ingest/parse_pdf.py` | PDF bytes to pages of text, including table text in reading order | Chunk, embed, upload, or call Document Intelligence |
 | `ingest/run.py` | The ingest command: parse, chunk, upload, embed, push, extract one row per KID, verify, write `sheet.json` | Answer a question |

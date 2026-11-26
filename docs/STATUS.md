@@ -1,12 +1,12 @@
 # Status
 
-Updated: 2026-11-25
+Updated: 2026-11-26
 
 ## Phase
 
 `building`
 
-M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes. M4 passed on fakes: `eval/golden.json` has 29 items, and `uv run pytest` is 52 passed and 1 skipped when Azure credentials are not in the environment. The skip is the live hybrid query. With those credentials the live query runs too. The manual live eval was not run.
+M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes. M4 passed on fakes: `eval/golden.json` has 29 items, and `uv run pytest` scores that file on fakes. The live hybrid query is skipped when Azure credentials are not in the environment. With those credentials it runs too. The manual live eval was not run. M5 passed on fakes: an accepted `/ask` writes the trace object to the log, a rejected envelope does not, and the same fields export to Application Insights only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. M6 is implemented and not deployed. There is no public URL yet. The human steps are in gitignored `docs/m6-setup.md`.
 
 ## Decision
 
@@ -16,7 +16,7 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Last session
 
-2026-11-25. M4 is in. The golden file is `eval/golden.json` (version `1`, 29 items, k = 8). Pull-request CI runs `uv run pytest`, which scores that file on fakes. A refusal with an answer body fails, and so does a path other than the item's label. `uv run eval-run` is the manual live run. It calls Azure and writes one MLflow file-store run. It was not run. Ingest was not run again, so the blob still has no `sheet.json`. Bicep was not deployed. The root `README.md` is the recruiter page: what the project is, what is in the repo, and the disclaimer. The M8 README (run steps, deploy, live eval numbers) is still later. Nothing was committed.
+2026-11-25. M6 code is in: `Dockerfile`, placeholder `GET /`, keyless adapters for the web identity, Container Apps in `infra/resources.bicep`, and `.github/workflows/deploy.yml`. Bicep was not deployed. The URL is not recorded because the app does not exist yet. The human setup is `docs/m6-setup.md`. Ingest has run and `sheet.json` is in the blob. Nothing was committed.
 
 ## Corpus measurements
 
@@ -30,11 +30,11 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Next action
 
-Human says when to start M5. Do not start it before that. A live sheet still needs `uv run ingest index`, which spends one chat call per KID. `uv run eval-run` spends about one live pass over the golden file and needs that sheet. Neither command was run in the M4 session.
+Human continues `docs/m6-setup.md` at "Image, then the app". `sheet.json` is in the blob. The deploy identity exists and is not a subscription owner. Do not start M7. `uv run eval-run` still needs the model endpoints as GitHub secrets for the manual workflow.
 
 ## Blockers
 
-None for M4. Do not create Azure AI Search Basic. The live `sheet.json` is absent until the next ingest. The manual eval workflow needs the Azure values as GitHub secrets before it can pass.
+Bicep matches the live Foundry deployments and has not been deployed. Do not create Azure AI Search Basic or Azure Container Registry. `sheet.json` is in the blob. Pull-request pytest still fails on GitHub because `data/pdfs/` is gitignored and the workflow does not download the PDFs.
 
 ## Done when this project is interview-ready
 

@@ -114,13 +114,21 @@ Copy endpoints from the portal into a local `.env` that is not committed. Do not
 
 A playground message in the Foundry project is enough to prove the chat deployment. The embedding deployment has no playground. Ingest uses its endpoint and deployment name.
 
-## Later, not now
+## Declared, not created yet
 
-Create these at M5 and M6, with the app, so they are not sitting unused:
+Do not create a second copy of these in the portal. The human deploy steps are in `docs/m6-setup.md`, which is gitignored.
 
-- Log Analytics workspace and Application Insights, with a daily ingestion cap of 0.1 GB. Turn off GenAI content capture. Logs keep the span fields only.
-- One Container Apps environment on the Consumption plan, and one app named `ca-fin-docs-rag` with minimum replicas 0. Liveness is `GET /health`. Readiness is `GET /ready`. The app identity can read blobs, query the index, and call the two model deployments. It cannot write the index or the blob, and it is not a subscription owner. Do not put the API keys in the container. Ingest keeps its own principal, which can write. Do not add a second host for the frontend.
+- Log Analytics workspace `log-fin-docs-rag` and Application Insights `appi-fin-docs-rag`, with a daily ingestion cap of 0.1 GB on the workspace and on the component. GenAI content capture stays off: the exporter sends the span fields only, and the process sets `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` to `false`.
+- Container Apps environment `cae-fin-docs-rag` on the Consumption plan, and one app named `ca-fin-docs-rag` with minimum replicas 0 and maximum 1. Liveness is `GET /health`. Readiness is `GET /ready`. `id-fin-docs-rag-web` is the only identity on the app. It can read the blob, query the index, and call the two model deployments. It cannot write the blob or the index. `id-fin-docs-rag-ingest` can write and is not attached to the app. Neither identity is a subscription owner. The container has no API keys. Do not add a second host for the frontend. The image is a public `ghcr.io` package, not an Azure Container Registry.
 - A caller secret in Key Vault only when a second app is registered. That app's server holds the secret. The secret is not written into a browser bundle. Until then the demo is the only caller. See `03-architecture.md`.
+
+## Teardown
+
+One command deletes the resource group, including the models, the search service, the storage account, and the corpus:
+
+```
+az group delete --name rg-fin-docs-rag --yes --no-wait
+```
 
 ## Do not create
 
@@ -152,8 +160,8 @@ Fill this in after setup. Leave secrets out.
 | Foundry resource name | `rg-fin-docs-rag-resource` |
 | Foundry OpenAI endpoint | `https://rg-fin-docs-rag-resource.openai.azure.com/` |
 | Foundry project endpoint | `https://rg-fin-docs-rag-resource.services.ai.azure.com/api/projects/rg-fin-docs-rag` |
-| Chat deployment and type | `GPT-4-1-mini`. Deployment type was not written down. |
-| Embedding deployment and type | `TEXT-embedding-3-small`. Deployment type was not written down. |
+| Chat deployment and type | `gpt-4.1-mini`, Global Standard, model version `2025-04-14`, capacity 100 (100,000 tokens per minute). |
+| Embedding deployment and type | `text-embedding-3-small`, Global Standard, model version `1`, capacity 500 (500,000 tokens per minute). |
 | Search service name and tier | `srch-fin-docs-rag`, Free |
 | Storage account name | `stfindocsrag` |
 | Blob container | `documents`, private. Ingest created it on 2026-11-25. |

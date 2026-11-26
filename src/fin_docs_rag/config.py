@@ -19,6 +19,7 @@ class Settings:
     storage_container: str
     storage_key: str
     key_vault_url: str
+    app_insights_connection_string: str
     index_name: str = "chunks"
 
 
@@ -42,13 +43,14 @@ def settings_from_env() -> Settings:
 
     return Settings(
         openai_endpoint=need("AZURE_OPENAI_ENDPOINT"),
-        openai_api_key=need("AZURE_OPENAI_API_KEY"),
+        openai_api_key=os.environ.get("AZURE_OPENAI_API_KEY", "").strip(),
         chat_deployment=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT", "").strip(),
         embedding_deployment=need("AZURE_OPENAI_EMBEDDING_DEPLOYMENT"),
         search_endpoint=need("AZURE_SEARCH_ENDPOINT"),
-        search_api_key=need("AZURE_SEARCH_API_KEY"),
+        search_api_key=os.environ.get("AZURE_SEARCH_API_KEY", "").strip(),
         storage_account=need("AZURE_STORAGE_ACCOUNT"),
         storage_container=need("AZURE_STORAGE_CONTAINER"),
         storage_key=os.environ.get("AZURE_STORAGE_KEY", "").strip(),
         key_vault_url=os.environ.get("AZURE_KEY_VAULT_URL", "").strip(),
+        app_insights_connection_string=os.environ.get("APPLICATIONINSIGHTS_CONNECTION_STRING", "").strip(),
     )

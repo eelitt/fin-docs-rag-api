@@ -7,11 +7,14 @@ param searchName string = 'srch-fin-docs-rag'
 param storageName string = 'stfindocsrag'
 param containerName string = 'documents'
 param vaultName string = 'kv-fin-docs-rag'
-param chatDeploymentName string = 'GPT-4-1-mini'
-param embeddingDeploymentName string = 'TEXT-embedding-3-small'
+param logAnalyticsName string = 'log-fin-docs-rag'
+param appInsightsName string = 'appi-fin-docs-rag'
+param containerImage string = ''
+param chatDeploymentName string = 'gpt-4.1-mini'
+param embeddingDeploymentName string = 'text-embedding-3-small'
 @description('Thousands of tokens per minute. Match the quota already set in the portal.')
-param chatCapacity int = 10
-param embeddingCapacity int = 10
+param chatCapacity int = 100
+param embeddingCapacity int = 500
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   name: resourceGroupName
@@ -32,5 +35,8 @@ module app 'resources.bicep' = {
     embeddingDeploymentName: embeddingDeploymentName
     chatCapacity: chatCapacity
     embeddingCapacity: embeddingCapacity
+    logAnalyticsName: logAnalyticsName
+    appInsightsName: appInsightsName
+    containerImage: containerImage
   }
 }

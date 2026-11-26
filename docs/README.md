@@ -20,7 +20,7 @@ Skip the rest unless the task touches it.
 | --- | --- |
 | `HANDOFF.md` | Briefing for the next agent. Update its "Now" section with `STATUS.md`. |
 | `STATUS.md` | Living handoff. Update it at the end of every session. Holds the measurements and the interview-ready bar. |
-| `00-context.md` | Portfolio gap, the two goals, and what a hiring reader still cannot see. |
+| `00-context.md` | Portfolio gap, the two goals, and what a hiring reader can and cannot see yet. |
 | `01-gap-map.md` | Job signal → portfolio evidence → what this repo shows, and the non-goals. |
 | `02-product.md` | User, corpus, fact sheet, follow-up questions, response bodies, demo. |
 | `03-architecture.md` | Stack, request path, deploy shape, cost, forbidden resources. Decided for v1. |
@@ -31,6 +31,8 @@ Skip the rest unless the task touches it.
 | `azure_setup.md` | Portal setup record. Done before M2. No secrets in that file. |
 
 `idea_one.md` at the repo root is the original note. Do not implement it. The living decisions are the files in this folder.
+
+The root `README.md` is the public description of the project. It is not a decision document. If it disagrees with this folder, this folder wins. M8 still adds local run steps, deploy steps, live eval numbers, a cost note, and a short map onto `01-gap-map.md`.
 
 ## Rules for agents
 

@@ -1,5 +1,6 @@
 import threading
 import time
+from collections.abc import Callable
 
 from openai import APIStatusError, AzureOpenAI, RateLimitError
 
@@ -9,13 +10,19 @@ _BATCH = 16
 
 
 class OpenAIEmbedder:
-    def __init__(self, endpoint: str, api_key: str, deployment: str) -> None:
+    def __init__(
+        self,
+        endpoint: str,
+        api_key: str,
+        deployment: str,
+        token_provider: Callable[[], str] | None = None,
+    ) -> None:
         self._deployment = deployment
         self._local = threading.local()
         self._client = AzureOpenAI(
             azure_endpoint=endpoint,
-            api_key=api_key,
             api_version="2024-10-21",
+            **_auth(api_key, token_provider),
         )
 
     @property
@@ -65,6 +72,12 @@ class OpenAIEmbedder:
             self._local.model = response.model or ""
             return [item.embedding for item in ordered]
         raise RuntimeError("embedding request was rate limited")
+
+
+def _auth(api_key: str, token_provider: Callable[[], str] | None) -> dict:
+    if api_key:
+        return {"api_key": api_key}
+    return {"azure_ad_token_provider": token_provider}
 
 
 def _retry_seconds(error: Exception, fallback: float) -> float:
