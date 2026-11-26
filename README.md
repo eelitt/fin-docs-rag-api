@@ -16,7 +16,7 @@ The service is Python 3.12 and FastAPI. It parses the PDFs, chunks them on the K
 
 `uv run pytest` is the offline suite. One hybrid-search test runs only when Azure credentials are already in the environment.
 
-Resource templates are in `infra/`. The demo page is the Vite app in `frontend/`. The container image builds it, and the same process serves it at `GET /`. The running app is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. That URL still serves the previous image until the next deploy.
+Resource templates are in `infra/`. The demo page is the Vite app in `frontend/`. The container image builds it, and the same process serves it at `GET /`. The running app is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. The demo page was added in `ghcr.io/eelitt/fin-docs-rag-api:7f341cfd66171397422f027a372c231563989246`.
 
 The public site does not serve MCP. A local process exposes `retrieve` and `compare_sentence`, the same functions the API uses. `compare_sentence` fills the comparison template from the stored sheet. It does not take an expression. One client call:
 

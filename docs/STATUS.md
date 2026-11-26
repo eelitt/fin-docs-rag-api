@@ -6,7 +6,7 @@ Updated: 2026-11-26
 
 `deployed`
 
-M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes. M4 passed on fakes: `eval/golden.json` has 29 items, and `uv run pytest` scores that file on fakes. The live hybrid query is skipped when Azure credentials are not in the environment. With those credentials it runs too. The manual live eval was not run. M5 passed on fakes: an accepted `/ask` writes the trace object to the log, a rejected envelope does not, and the same fields export to Application Insights only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. M6 is deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /health` and `GET /ready` returned status ok. `POST /ask` for the ongoing cost of `FI0008804729` returned HTTP 200 and the sentence that the cost was not extracted. Every `ongoing_charge` cell in the live sheet is `not_extracted`. The setup notes are in gitignored `docs/m6-setup.md`. M7 passed on fakes. A local stdio server exposes `retrieve` and `compare_sentence`. The public app does not serve MCP. M8 is in the working tree and is not deployed: `frontend/` is the Vite page, the image build copies it, and FastAPI serves `frontend/dist` at `GET /`. The public URL still serves the previous image.
+M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes. M4 passed on fakes: `eval/golden.json` has 29 items, and `uv run pytest` scores that file on fakes. The live hybrid query is skipped when Azure credentials are not in the environment. With those credentials it runs too. The manual live eval was not run. M5 passed on fakes: an accepted `/ask` writes the trace object to the log, a rejected envelope does not, and the same fields export to Application Insights only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. M6 is deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /health` and `GET /ready` returned status ok. `POST /ask` for the ongoing cost of `FI0008804729` returned HTTP 200 and the sentence that the cost was not extracted. Every `ongoing_charge` cell in the live sheet is `not_extracted`. The setup notes are in gitignored `docs/m6-setup.md`. M7 passed on fakes. A local stdio server exposes `retrieve` and `compare_sentence`. The public app does not serve MCP. M8 is deployed. `frontend/` is the Vite page, the image build copies it, and FastAPI serves `frontend/dist` at `GET /`. The page was added in `ghcr.io/eelitt/fin-docs-rag-api:7f341cfd66171397422f027a372c231563989246`. `GET /` on the public URL returns that page.
 
 ## Decision
 
@@ -16,7 +16,7 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Last session
 
-2026-11-26. M8 adds the Vite page, serves the built files at `GET /`, and extends the root README. `uv run pytest` was 65 passed and 1 skipped. `uv run eval-run` against Azure was not ok: 9 of 29 items passed, and the retrieval hit rate at 8 was 0.6 (3 of 5). One accepted `POST /ask` on the deployed app returned a trace, and that trace is in the README. The new page is not deployed.
+2026-11-26. The demo page deploy of `7f341cfd66171397422f027a372c231563989246` finished. The public `GET /` returns the Vite page, `GET /sheet` returned 22 funds, and `GET /health` returned ok. `uv run pytest` was 65 passed and 1 skipped. `uv run eval-run` against Azure was not ok: 9 of 29 items passed, and the retrieval hit rate at 8 was 0.6 (3 of 5).
 
 ## Corpus measurements
 
@@ -30,7 +30,7 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Next action
 
-Do not start M9. Deploy the M8 image only when the human asks. The live sheet still has 22 rows and every `ongoing_charge` cell is `not_extracted`. The manual workflow still needs the model endpoints as GitHub secrets. The live numbers in the README are from a local `uv run eval-run`.
+Do not start M9. Do not deploy again unless the human asks. The live sheet still has 22 rows and every `ongoing_charge` cell is `not_extracted`. The manual workflow still needs the model endpoints as GitHub secrets. The live numbers in the README are from a local `uv run eval-run`.
 
 ## Blockers
 

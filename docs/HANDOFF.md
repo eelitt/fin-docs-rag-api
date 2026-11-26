@@ -20,9 +20,9 @@ Then open the doc the task touches. Do not re-decide a choice marked **decided**
 
 ## Now
 
-Phase: `deployed`. M1, M2, M3, M4, and M5 passed. M3, M4, and M5 passed on fakes. M6 is deployed. M7 passed on fakes. M8 is in the working tree and is not deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. That URL still serves the image from `4c0358a`, so `GET /` there is still the placeholder. Locally, FastAPI serves `frontend/dist` at `GET /`. `GET /health` and `GET /ready` returned status ok. The scripted `POST /ask` returned HTTP 200 and said the ongoing cost of `FI0008804729` was not extracted. `sheet.json` is in the blob. Every `ongoing_charge` cell is `not_extracted`.
+Phase: `deployed`. M1, M2, M3, M4, and M5 passed. M3, M4, and M5 passed on fakes. M6 is deployed. M7 passed on fakes. M8 is deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. The page was added in `ghcr.io/eelitt/fin-docs-rag-api:7f341cfd66171397422f027a372c231563989246`. `GET /` returns the Vite page. `GET /health` returned status ok. `GET /sheet` returned 22 funds. The scripted `POST /ask` returned HTTP 200 and said the ongoing cost of `FI0008804729` was not extracted. `sheet.json` is in the blob. Every `ongoing_charge` cell is `not_extracted`.
 
-Next action: do not start M9. Do not deploy unless the human asks. A fresh sheet extract is what would fill the cost cells. The ongoing-cost column key is `ongoing_charge`. `uv run eval-run` on 2026-11-26 was not ok: 9 of 29 items passed, and the retrieval hit rate at 8 was 0.6 (3 of 5). The README records that run and one live trace. The manual GitHub workflow still needs the model endpoints as secrets.
+Next action: do not start M9. Do not deploy again unless the human asks. A fresh sheet extract is what would fill the cost cells. A rerun uses the same one-figure check, so it can write the same empty cells. The ongoing-cost column key is `ongoing_charge`. `uv run eval-run` on 2026-11-26 was not ok: 9 of 29 items passed, and the retrieval hit rate at 8 was 0.6 (3 of 5). The README records that run and one live trace. The manual GitHub workflow still needs the model endpoints as secrets.
 
 ## Done
 
@@ -46,7 +46,7 @@ Next action: do not start M9. Do not deploy unless the human asks. A fresh sheet
 ## Do not
 
 - Implement `idea_one.md`. The decisions are in `docs/`.
-- Open M9 or later to fill out the repo. `07-code-architecture.md` is the full map. `frontend/` is the M8 page. Do not deploy it unless the human asks.
+- Open M9 or later to fill out the repo. `07-code-architecture.md` is the full map. `frontend/` is the deployed M8 page. Do not deploy again unless the human asks.
 - Create Azure AI Search Basic, a second search service, semantic ranker, provisioned throughput, Document Intelligence, Container Registry, or SFTP.
 - Put secrets, connection strings, or keys in docs, chat, or git. They stay in `.env`.
 - Name a bank or a fund company in docs, UI, README, or code. The sources manifest is the exception. Chunk text may contain whatever the PDF prints.
