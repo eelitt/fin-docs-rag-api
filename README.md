@@ -147,8 +147,6 @@ One accepted `POST /ask` on the deployed app, 2026-11-26. The question is not a 
 
 ## What the project shows
 
-The longer table is `docs/01-gap-map.md`.
-
 | Signal | Where it shows up |
 | --- | --- |
 | Python for a production service | FastAPI app, pytest, `uv` packaging |

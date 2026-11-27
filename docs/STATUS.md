@@ -16,7 +16,7 @@ The gitignored note `idea_one.md` is accepted on the domain and the lifecycle (r
 
 ## Last session
 
-2026-11-27. Doc cleanup. The cited-sheet limits that this run does not fix are parked in `05-open-questions.md`. `docs/m6-setup.md` is deleted. `docs/azure_setup.md` and `idea_one.md` stay on disk and are gitignored.
+2026-11-27. Doc cleanup. The cited-sheet limits that this run does not fix are parked in `05-open-questions.md`. `docs/m6-setup.md` is deleted. `docs/azure_setup.md`, `idea_one.md`, and `docs/01-gap-map.md` stay on disk and are gitignored. `docs/01-gap-map.md` was removed from main history.
 
 2026-11-26. Cited sheet columns. `domain/kid_cost.py` fills the ongoing cost, the risk indicator (`määritetty N`), and the recommended holding sentence, including `3 kuukautta` as printed. `uv run ingest sheet` replaced those three columns on the blob sheet and did not call a model. Public `GET /sheet` shows 22 rows, and all three columns are `stated` on every row. A compare of `FI0008804729` and `FI0008804687` states 0.3 and 0.9. `uv run pytest` was 80 passed and 1 skipped. The empty-cell `uv run eval-run` stays 9 of 29. The later run was 21 of 29: sheet 12 of 15, retrieve 6 of 10, refuse 3 of 4. Retrieval hit rate at 8 was 0.6. The misses are `near-pharos-phoebus` (`FI0008801907:costs:3:0` not in the first 8) and `near-eurooppa` (`FI0008801774:costs:3:0` not in the first 8). The three sheet misses are `fact-sri-4729`, `fact-sri-1733`, and `compare-sri-different-holding`: the router sent those risk-indicator questions to search. No query, filter, or golden-id change. The local page marks the quote in the passage. The public page does not, because it was not deployed.
 
@@ -47,7 +47,7 @@ All of these are visible in the public repo:
 - A checked-in eval set reports retrieval and faithfulness numbers, including questions the system must refuse.
 - A trace shows retrieved passages, model, tokens, and cost for one real call.
 - Azure resources are declared as infrastructure as code and the API is deployable as a container.
-- The README maps each of those to a requirement in `01-gap-map.md`.
+- The README has a short map of those signals.
 
 ## Session handoff template
 
