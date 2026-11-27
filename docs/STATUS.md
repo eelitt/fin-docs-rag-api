@@ -6,7 +6,7 @@ Updated: 2026-11-27
 
 `deployed`
 
-M1 through M8 are done. M3, M4, M5, and M7 passed on fakes. M6 and M8 are deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /health` and `GET /ready` returned status ok. `GET /` returns the Vite page from image `ghcr.io/eelitt/fin-docs-rag-api:7f341cfd66171397422f027a372c231563989246`. That tag is a container image, not a commit on current `main`. The live sheet has 22 rows. `ongoing_charge`, `sri`, and `holding_period` are `stated` on every row. Entry cost and exit cost are unchanged. `uv run ingest sheet` wrote those three columns and did not call a model. The public page does not mark the passage. Known limits are parked in `05-open-questions.md`. M7 is a local stdio server with `retrieve` and `compare_sentence`. The public app does not serve MCP. Do not start M9.
+M1 through M8 are done. M3, M4, M5, and M7 passed on fakes. M6 and M8 are deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /health` and `GET /ready` returned status ok. `GET /` returns the Vite page from image `ghcr.io/eelitt/fin-docs-rag-api:e979dea776fc8e3f1823fa86c61cd78816066934`. That tag is commit `e979dea` on `main`. The live sheet has 22 rows. `ongoing_charge`, `sri`, and `holding_period` are `stated` on every row. Entry cost and exit cost are unchanged. `uv run ingest sheet` wrote those three columns and did not call a model. The public page marks each quote in its passage. A public compare does not add a second period when the holding quote already ends with one. Known limits are parked in `05-open-questions.md`. M7 is a local stdio server with `retrieve` and `compare_sentence`. The public app does not serve MCP. Do not start M9.
 
 ## Decision
 
@@ -15,6 +15,8 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 The gitignored note `idea_one.md` is accepted on the domain and the lifecycle (retrieve, judge, answer, evaluate, observe). It is not accepted on Azure: the system runs on Azure. Writing "how this would move to Azure" does not close the gap. Do not implement that note.
 
 ## Last session
+
+2026-11-27. Deployed the cited sheet page. The running image is `ghcr.io/eelitt/fin-docs-rag-api:e979dea776fc8e3f1823fa86c61cd78816066934`. GitHub deploy and tests both succeeded. The public page script is `/assets/index-dNgVbP5D.js` and includes the passage mark. A compare of `FI0008804729` and `FI0008804687` ends the holding quote `Suositeltu sijoitusaika on 5 vuotta.` with one period.
 
 2026-11-27. Doc cleanup. The cited-sheet limits that this run does not fix are parked in `05-open-questions.md`. `docs/m6-setup.md` is deleted. `docs/azure_setup.md`, `idea_one.md`, and `docs/01-gap-map.md` stay on disk and are gitignored. `docs/01-gap-map.md` was removed from main history.
 
@@ -32,7 +34,7 @@ The gitignored note `idea_one.md` is accepted on the domain and the lifecycle (r
 
 ## Next action
 
-Do not start M9. Do not deploy again unless the human asks. The marked passage is on the local page only. The manual workflow still needs the model endpoints as GitHub secrets.
+Do not start M9. Do not deploy again unless the human asks. The manual workflow still needs the model endpoints as GitHub secrets.
 
 ## Blockers
 

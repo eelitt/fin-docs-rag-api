@@ -92,7 +92,7 @@ The ongoing-cost cells were `not_extracted` because a model quote that contains 
 - A `stated` cell may add `passage`, the collapsed chunk text. The quote stays the one-figure token. `not_extracted` stays `{ "state": "…" }` only. The page marks the quote in that passage. The follow-up box stays on the quarterly review. Deploy the page only if the human asks.
 - Name the retrieval misses in `STATUS.md`. A code change is allowed only for a bug in the query, the filter, or the golden id. Do not retune chunk sizes or add a ranker or an Azure resource.
 
-Check: the blob sheet has 22 rows, and `ongoing_charge`, `sri`, and `holding_period` are `stated` for every row those grammars cover. Public `GET /sheet` shows the cost figures without a new image. The README shows the empty-cell eval and the later run split by path. The marked passage is on the local page, and on the public page only after a deploy the human asked for.
+Check: the blob sheet has 22 rows, and `ongoing_charge`, `sri`, and `holding_period` are `stated` for every row those grammars cover. Public `GET /sheet` shows the cost figures without a new image. The README shows the empty-cell eval and the later run split by path. The marked passage is on the public page. Deployed 2026-11-27.
 
 ## M9 — Later, only after M8
 

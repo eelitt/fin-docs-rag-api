@@ -20,7 +20,7 @@ Then open the doc the task touches. Do not re-decide a choice marked **decided**
 
 ## Now
 
-Phase: `deployed`. M1 through M8 are done. M3, M4, M5, and M7 passed on fakes. M6 and M8 are deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /` returns the Vite page from image `ghcr.io/eelitt/fin-docs-rag-api:7f341cfd66171397422f027a372c231563989246`. That tag is a container image, not a commit on current `main`. `GET /health` returned status ok. `GET /sheet` returned 22 funds. `ongoing_charge`, `sri`, and `holding_period` are `stated` on every row. `uv run ingest sheet` wrote those cells from the local KIDs and did not call a model. Entry cost and exit cost are unchanged. The public page does not mark the passage, because it was not deployed again.
+Phase: `deployed`. M1 through M8 are done. M3, M4, M5, and M7 passed on fakes. M6 and M8 are deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /` returns the Vite page from image `ghcr.io/eelitt/fin-docs-rag-api:e979dea776fc8e3f1823fa86c61cd78816066934`, which is commit `e979dea` on `main`. `GET /health` returned status ok. `GET /sheet` returned 22 funds. `ongoing_charge`, `sri`, and `holding_period` are `stated` on every row. `uv run ingest sheet` wrote those cells from the local KIDs and did not call a model. Entry cost and exit cost are unchanged. The public page marks each quote in its passage.
 
 Next action: do not start M9. Do not deploy again unless the human asks. Known limits are parked in `05-open-questions.md` and are not the next task. The empty-cell `uv run eval-run` on 2026-11-26 was 9 of 29, with retrieval hit rate at 8 of 0.6 (3 of 5). The later run was 21 of 29: sheet 12 of 15, retrieve 6 of 10, refuse 3 of 4, and the same hit rate. Retrieval misses are `near-pharos-phoebus` and `near-eurooppa`. The README records both runs and one live trace. The manual GitHub workflow still needs the model endpoints as secrets.
 
@@ -41,7 +41,7 @@ Next action: do not start M9. Do not deploy again unless the human asks. Known l
 - Root `README.md` tells a recruiter what the project is and carries the disclaimer. M8 added local run steps, deploy steps, the 2026-11-26 live eval numbers, a cost note, one live trace, and a short map of what the project shows.
 - Bicep is in `infra/` and has been deployed to `rg-fin-docs-rag`. A later deploy updates the portal resources that already exist, including search authentication and the Foundry account. Azure CLI 2.93.0 is installed. A new terminal is needed before `az` is on `PATH`.
 
-Image tags `7f341cfd66171397422f027a372c231563989246` and `4c0358ab339a74809b612e4eb66f90f6c6e389ba` are GHCR tags. They are not commits on current `main`. Do not check them out. `STATUS.md` records the public URL. Trust `STATUS.md` over an older note that says the app is not deployed.
+The running image is `ghcr.io/eelitt/fin-docs-rag-api:e979dea776fc8e3f1823fa86c61cd78816066934`, commit `e979dea` on `main`. Older tags `7f341cfd66171397422f027a372c231563989246` and `4c0358ab339a74809b612e4eb66f90f6c6e389ba` are GHCR tags. They are not commits on current `main`. Do not check them out. `STATUS.md` records the public URL. Trust `STATUS.md` over an older note that says the app is not deployed.
 
 ## Do not
 

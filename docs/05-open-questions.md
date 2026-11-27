@@ -47,7 +47,7 @@ Recorded 2026-11-27. These are not open questions. Do not start them unless the 
 
 - `ingest index` overlays a grammar cell only when it is `stated`. A miss leaves the model cell. `ingest sheet` refuses the upload. Do not change that split.
 - `3 kuukautta` is stored as `3`. The compare template labels a holding-period difference as years. Do not convert `3` into `0.25`.
-- The marked passage, and a holding quote that already ends with `.`, are correct on the local page. The public image still lacks the mark and still adds a second period. Do not deploy unless asked.
+- The marked passage and the single period on a holding quote that already ends with `.` shipped on 2026-11-27 in `ghcr.io/eelitt/fin-docs-rag-api:e979dea776fc8e3f1823fa86c61cd78816066934`. Do not deploy again unless asked.
 - Router misses `fact-sri-4729`, `fact-sri-1733`, and `compare-sri-different-holding`, and retrieval misses `near-pharos-phoebus` and `near-eurooppa`, stay as recorded in `STATUS.md`. No query, filter, golden-id, chunk-size, or ranker change.
 - The grammar covers the three Finnish layouts in the current 12 KIDs. A new wording fails `ingest sheet`. There is no grammar id on the cell. Do not add one.
 - `passage` is the collapsed chunk, copied onto every share-class row, and public `GET /sheet` already returns it. Do not trim it.
