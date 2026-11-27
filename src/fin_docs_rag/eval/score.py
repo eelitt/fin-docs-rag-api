@@ -39,23 +39,32 @@ def summarize(items: list[dict], answers: list[Answer], sheet: dict, k: int, ver
     failures = []
     hits = 0
     named = 0
+    misses = []
+    by_path = {path: {"items": 0, "passed": 0} for path in PATHS}
     for item, answer in zip(items, answers, strict=True):
         errors = check_item(item, answer, sheet)
         if errors:
             failures.append({"id": item["id"], "errors": errors})
+        else:
+            by_path[item["path"]]["passed"] += 1
+        by_path[item["path"]]["items"] += 1
         hit = retrieval_hit(item, answer, k)
         if hit is not None:
             named += 1
             hits += int(hit)
+            if not hit:
+                misses.append(item["id"])
     rate = None if named == 0 else hits / named
     return {
         "ok": not failures,
         "eval_set_version": version,
         "k": k,
         "items": len(items),
+        "by_path": by_path,
         "hit_rate_at_k": rate,
         "hits": hits,
         "hit_items": named,
+        "retrieval_misses": misses,
         "failures": failures,
     }
 

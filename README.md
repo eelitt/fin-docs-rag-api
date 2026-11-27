@@ -49,7 +49,7 @@ asyncio.run(main())
 
 Install [uv](https://docs.astral.sh/uv/) and Node.js. From the repo root, put the Azure settings in a `.env` file that is not committed. The names are `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_CHAT_DEPLOYMENT` (`gpt-4.1-mini`), `AZURE_OPENAI_EMBEDDING_DEPLOYMENT` (`text-embedding-3-small`), `AZURE_SEARCH_ENDPOINT`, `AZURE_STORAGE_ACCOUNT`, and `AZURE_STORAGE_CONTAINER` (`documents`). `AZURE_OPENAI_API_KEY`, `AZURE_SEARCH_API_KEY`, and `AZURE_STORAGE_KEY` are optional when the Azure CLI login can call those services. Do not commit the file.
 
-The app reads the sheet and the index that are already in that account. `uv run python scripts/download_sources.py` downloads the PDFs, which stay out of git. `uv run ingest index` parses them, embeds them, and writes the sheet again.
+The app reads the sheet and the index that are already in that account. `uv run python scripts/download_sources.py` downloads the PDFs, which stay out of git. `uv run ingest index` parses them, embeds them, and writes the sheet again. `uv run ingest sheet` reads those local KIDs and replaces the ongoing cost, the risk indicator, and the recommended holding period on the stored sheet. It does not call a model. Entry cost and exit cost stay as stored.
 
 Build the page, then start the API. Open `http://127.0.0.1:8000`.
 
@@ -75,7 +75,9 @@ az group delete --name rg-fin-docs-rag --yes --no-wait
 
 `eval/golden.json` version `1` has 29 items, scored at k = 8. Pull-request CI runs that file on fakes. On fakes the retrieval hit rate at 8 is 1, a refusal with an answer body fails, and a run that takes a path other than its label fails.
 
-`uv run eval-run` scores the same file against Azure and writes one MLflow run under `mlruns/`, experiment `fin-docs-rag`. The live run on 2026-11-26 was not ok: 9 of 29 items passed, and the retrieval hit rate at 8 was 0.6 (3 of 5 items that name a chunk). Many sheet items missed the expected number. The stored ongoing-cost cells are `not_extracted`.
+`uv run eval-run` scores the same file against Azure and writes one MLflow run under `mlruns/`, experiment `fin-docs-rag`. The empty-cell run on 2026-11-26 was not ok: 9 of 29 items passed, and the retrieval hit rate at 8 was 0.6 (3 of 5 items that name a chunk). The ongoing-cost cells were `not_extracted` for that run.
+
+A later run the same day, after the grammars filled the ongoing cost, the risk indicator, and the recommended holding period, was not ok: 21 of 29 passed. By path, sheet passed 12 of 15, retrieve passed 6 of 10, and refuse passed 3 of 4. The retrieval hit rate at 8 was again 0.6 (3 of 5). The two misses are `near-pharos-phoebus` and `near-eurooppa`.
 
 ## Cost
 

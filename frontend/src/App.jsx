@@ -218,8 +218,25 @@ function Cell({ cell }) {
     .join(" · ");
   return (
     <>
-      <span>{cell.quote}</span>
+      {cell.passage ? <p className="passage">{markQuote(cell.passage, cell.quote)}</p> : <span>{cell.quote}</span>}
       {where ? <span className="cite">{where}</span> : null}
+    </>
+  );
+}
+
+function markQuote(passage, quote) {
+  if (!quote) {
+    return passage;
+  }
+  const index = passage.indexOf(quote);
+  if (index < 0) {
+    return passage;
+  }
+  return (
+    <>
+      {passage.slice(0, index)}
+      <mark>{quote}</mark>
+      {passage.slice(index + quote.length)}
     </>
   );
 }

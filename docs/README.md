@@ -8,9 +8,8 @@ Two goals. Show the production AI work missing from portfolio-tracker, for later
 
 1. `HANDOFF.md` — briefing for a new agent. Before any code change, read `Claude.md`.
 2. `STATUS.md` — phase, next action, blockers. If it disagrees with `HANDOFF.md`, this file wins.
-3. `00-context.md` — why the project exists.
-4. The current milestone in `04-milestones.md`. `STATUS.md` says which one is next.
-5. `05-open-questions.md` only if the next action is blocked.
+3. The current milestone in `04-milestones.md`. `STATUS.md` says which one is next.
+4. `05-open-questions.md` only if the next action is blocked. Known limits are parked there.
 
 Skip the rest unless the task touches it.
 
@@ -20,19 +19,19 @@ Skip the rest unless the task touches it.
 | --- | --- |
 | `HANDOFF.md` | Briefing for the next agent. Update its "Now" section with `STATUS.md`. |
 | `STATUS.md` | Living handoff. Update it at the end of every session. Holds the measurements and the interview-ready bar. |
-| `00-context.md` | Portfolio gap, the two goals, and what a hiring reader can and cannot see yet. |
+| `00-context.md` | Local only. Gitignored. Not a decision doc. |
 | `01-gap-map.md` | Job signal → portfolio evidence → what this repo shows, and the non-goals. |
 | `02-product.md` | User, corpus, fact sheet, follow-up questions, response bodies, demo. |
 | `03-architecture.md` | Stack, request path, deploy shape, cost, forbidden resources. Decided for v1. |
 | `04-milestones.md` | Build order, M1 through M9. One milestone at a time. |
-| `05-open-questions.md` | Closed choices and parked items. The remaining column-key choice is in `STATUS.md`. |
+| `05-open-questions.md` | Closed choices, parked items, and known limits. |
 | `06-ai-architecture.md` | Model calls, index, chunking, quote check, eval, libraries left out. |
 | `07-code-architecture.md` | Python modules, one job each, and the dependency rule. |
-| `azure_setup.md` | Portal setup record. Done before M2. No secrets in that file. |
+| `azure_setup.md` | Local only. Gitignored portal diary. Not a decision doc. Endpoints stay in `.env`. |
 
-`idea_one.md` at the repo root is the original note. Do not implement it. The living decisions are the files in this folder.
+`idea_one.md` at the repo root is gitignored. Do not implement it. The living decisions are the files in this folder.
 
-The root `README.md` is the public description of the project. It is not a decision document. If it disagrees with this folder, this folder wins. M8 still adds local run steps, deploy steps, live eval numbers, a cost note, and a short map onto `01-gap-map.md`.
+The root `README.md` is the public description of the project. It is not a decision document. If it disagrees with this folder, this folder wins. M8 added local run steps, deploy steps, live eval numbers, a cost note, and a short map onto `01-gap-map.md`.
 
 ## Rules for agents
 
@@ -41,5 +40,5 @@ The root `README.md` is the public description of the project. It is not a decis
 - Do not start implementation while `STATUS.md` says phase `planning` unless the human asks to build.
 - At the end of a session, update `STATUS.md`: phase, last session, next action, blockers. Leave the other docs alone if nothing was decided.
 - Public financial documents only. No customer data, no scraped paywalled research, and no claim of affiliation with a bank or fund company. Name none of them in the docs, the UI, or the repo.
-- Azure is part of the running system. A migration essay is not a deliverable. Create only the resources in `azure_setup.md`. Do not create Azure AI Search Basic. A budget alert does not stop spend.
+- Azure is part of the running system. A migration essay is not a deliverable. Create only the resources named in `infra/` and `03-architecture.md`. Do not create Azure AI Search Basic. A budget alert does not stop spend.
 - The first code commit includes a `.gitignore` for `.env`, downloaded PDFs, and MLflow runs. Do not commit those.

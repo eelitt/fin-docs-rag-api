@@ -56,6 +56,7 @@ class SheetCell:
     quote: str | None = None
     number: float | None = None
     citation: Citation | None = None
+    passage: str | None = None
 
     def to_dict(self) -> dict:
         if self.state != "stated":
@@ -65,6 +66,8 @@ class SheetCell:
             body["number"] = json_number(self.number)
         body["quote"] = self.quote
         body["citation"] = None if self.citation is None else self.citation.to_dict()
+        if self.passage:
+            body["passage"] = self.passage
         return body
 
 
@@ -128,6 +131,7 @@ def cell_from_dict(data: dict) -> SheetCell:
             page=raw.get("page"),
             section=raw.get("section"),
         ),
+        passage=data.get("passage"),
     )
 
 

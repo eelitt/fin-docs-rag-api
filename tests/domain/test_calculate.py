@@ -58,6 +58,21 @@ def test_a_missing_row_is_named():
     assert "difference" not in sentence
 
 
+def test_a_holding_sentence_that_ends_with_a_period_is_not_doubled():
+    sentence = compare_sentence(
+        "FI0008804729",
+        _cell(0.3, "0,30 %"),
+        "FI0008804687",
+        _cell(0.9, "0,9 prosenttia"),
+        "ongoing_charge",
+        _cell(1, "Suositeltu sijoitusaika: 1 vuosi"),
+        _cell(5, "Suositeltu sijoitusaika on 5 vuotta."),
+    )
+    assert "assumes Suositeltu sijoitusaika: 1 vuosi." in sentence
+    assert "assumes Suositeltu sijoitusaika on 5 vuotta." in sentence
+    assert "vuotta.." not in sentence
+
+
 def test_sri_difference_uses_risk_indicator_steps():
     sentence = compare_sentence(
         "A",

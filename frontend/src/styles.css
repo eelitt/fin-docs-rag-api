@@ -50,6 +50,14 @@ th, td {
   font-size: 0.85rem;
 }
 
+.passage {
+  margin: 0;
+}
+
+mark {
+  background: #f5e6a8;
+}
+
 .pair {
   display: grid;
   grid-template-columns: 1fr;

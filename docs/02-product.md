@@ -95,7 +95,7 @@ Returns the stored `sheet.json` document. No model call and no trace.
 
 `isin` is the row key. The cell keys are `product`, `sri`, `holding_period`, `ongoing_charge`, `entry_cost`, and `exit_cost`.
 
-`stated` has `quote` and `citation`. The citation `quote` is the same string as the cell `quote`. The numeric columns are `sri`, `holding_period`, `ongoing_charge`, `entry_cost`, and `exit_cost`. A stated numeric cell also has `number`, the parsed figure with a dot decimal. `product` has no `number`. A numeric column is `stated` only when one printed figure matches `number`. The model saying the field is absent stores `not_stated`. A claimed value that fails the quote or figure check stores `not_extracted`. Those two states are `{ "state": "…" }` and nothing else.
+`stated` has `quote` and `citation`. The citation `quote` is the same string as the cell `quote`. The numeric columns are `sri`, `holding_period`, `ongoing_charge`, `entry_cost`, and `exit_cost`. A stated numeric cell also has `number`, the parsed figure with a dot decimal. `product` has no `number`. A numeric column is `stated` only when one printed figure matches `number`. A `stated` cell may include `passage`, the collapsed chunk text. The quote stays the short printed token, such as `0,30 %`, `määritetty 2`, or `Suositeltu sijoitusaika: 3 kuukautta`. The model saying the field is absent stores `not_stated`. A claimed value that fails the quote or figure check stores `not_extracted`. Those two states are `{ "state": "…" }` and nothing else.
 
 ### `GET /compare`
 

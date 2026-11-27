@@ -39,6 +39,7 @@ src/fin_docs_rag/
     chunking.py
     verify.py
     calculate.py
+    kid_cost.py
   ports.py
   steps/
     route.py
@@ -96,6 +97,7 @@ Pure data and pure rules. No Azure, no FastAPI, no prompt wording.
 | `domain/isin.py` | The ISIN regex and the scan of a question or a page | Search, or guess a fund name |
 | `domain/chunking.py` | Heading split, the token windows from `06-ai-architecture.md`, and chunk ids `{doc_id}:{section}:{page}:{window}` | Open a PDF or embed a chunk |
 | `domain/verify.py` | Chunk-id membership, quote substring, the 400-character cap, Finnish comma decimal against the model's number | Call the model again, or rewrite the answer |
+| `domain/kid_cost.py` | KID grammars for the ongoing cost, the risk indicator, and the recommended holding sentence. A sheet cell out | Call the model, or compare funds |
 | `domain/calculate.py` | The difference of two `stated` cells, both holding periods, and the comparison template. An empty cell produces no difference. The template does not rank the funds | Extract numbers from prose, or read the blob |
 
 ## Ports

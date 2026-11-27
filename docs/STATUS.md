@@ -1,22 +1,24 @@
 # Status
 
-Updated: 2026-11-26
+Updated: 2026-11-27
 
 ## Phase
 
 `deployed`
 
-M1 passed. M2 passed: ingest uploaded the corpus, embedded it, and pushed index `chunks`. A hybrid query for the known charge returns `FI0008804729:costs:3:0`, and that chunk contains `0,30 %`. M3 passed on fakes. M4 passed on fakes: `eval/golden.json` has 29 items, and `uv run pytest` scores that file on fakes. The live hybrid query is skipped when Azure credentials are not in the environment. With those credentials it runs too. The manual live eval was not run. M5 passed on fakes: an accepted `/ask` writes the trace object to the log, a rejected envelope does not, and the same fields export to Application Insights only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. M6 is deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /health` and `GET /ready` returned status ok. `POST /ask` for the ongoing cost of `FI0008804729` returned HTTP 200 and the sentence that the cost was not extracted. Every `ongoing_charge` cell in the live sheet is `not_extracted`. The setup notes are in gitignored `docs/m6-setup.md`. M7 passed on fakes. A local stdio server exposes `retrieve` and `compare_sentence`. The public app does not serve MCP. M8 is deployed. `frontend/` is the Vite page, the image build copies it, and FastAPI serves `frontend/dist` at `GET /`. The page was added in `ghcr.io/eelitt/fin-docs-rag-api:7f341cfd66171397422f027a372c231563989246`. `GET /` on the public URL returns that page.
+M1 through M8 are done. M3, M4, M5, and M7 passed on fakes. M6 and M8 are deployed. The public URL is `https://ca-fin-docs-rag.thankfulflower-24c321f8.swedencentral.azurecontainerapps.io`. `GET /health` and `GET /ready` returned status ok. `GET /` returns the Vite page from image `ghcr.io/eelitt/fin-docs-rag-api:7f341cfd66171397422f027a372c231563989246`. That tag is a container image, not a commit on current `main`. The live sheet has 22 rows. `ongoing_charge`, `sri`, and `holding_period` are `stated` on every row. Entry cost and exit cost are unchanged. `uv run ingest sheet` wrote those three columns and did not call a model. The public page does not mark the passage. Known limits are parked in `05-open-questions.md`. M7 is a local stdio server with `retrieve` and `compare_sentence`. The public app does not serve MCP. Do not start M9.
 
 ## Decision
 
 Build a Python RAG service on Azure over a small corpus of public fund documents. The product is a cited fact sheet for that shelf, built when the documents are indexed, plus a follow-up question that cites or refuses. `POST /ask` takes an envelope: `request_id`, `caller`, `instrument_ids`, and `question`. v1 accepts only `caller: demo` and rejects any personal field before a model call. The response bodies and the `/ask` error checks are in `02-product.md`. The trace stores `instrument_ids` for the demo only. A later caller's ISIN list stays in that app's log. The trace does not store the question. The demo is a Vite React app served as static files by the same Container App. Evaluation and a trace of cost and retrieval stay in scope. It is a research aid, not a consumer robo-advisor.
 
-`idea_one.md` is accepted on the domain and the lifecycle (retrieve, judge, answer, evaluate, observe). It is not accepted on Azure: the system runs on Azure. Writing "how this would move to Azure" does not close the gap.
+The gitignored note `idea_one.md` is accepted on the domain and the lifecycle (retrieve, judge, answer, evaluate, observe). It is not accepted on Azure: the system runs on Azure. Writing "how this would move to Azure" does not close the gap. Do not implement that note.
 
 ## Last session
 
-2026-11-26. The demo page deploy of `7f341cfd66171397422f027a372c231563989246` finished. The public `GET /` returns the Vite page, `GET /sheet` returned 22 funds, and `GET /health` returned ok. `uv run pytest` was 65 passed and 1 skipped. `uv run eval-run` against Azure was not ok: 9 of 29 items passed, and the retrieval hit rate at 8 was 0.6 (3 of 5).
+2026-11-27. Doc cleanup. The cited-sheet limits that this run does not fix are parked in `05-open-questions.md`. `docs/m6-setup.md` is deleted. `docs/azure_setup.md` and `idea_one.md` stay on disk and are gitignored.
+
+2026-11-26. Cited sheet columns. `domain/kid_cost.py` fills the ongoing cost, the risk indicator (`määritetty N`), and the recommended holding sentence, including `3 kuukautta` as printed. `uv run ingest sheet` replaced those three columns on the blob sheet and did not call a model. Public `GET /sheet` shows 22 rows, and all three columns are `stated` on every row. A compare of `FI0008804729` and `FI0008804687` states 0.3 and 0.9. `uv run pytest` was 80 passed and 1 skipped. The empty-cell `uv run eval-run` stays 9 of 29. The later run was 21 of 29: sheet 12 of 15, retrieve 6 of 10, refuse 3 of 4. Retrieval hit rate at 8 was 0.6. The misses are `near-pharos-phoebus` (`FI0008801907:costs:3:0` not in the first 8) and `near-eurooppa` (`FI0008801774:costs:3:0` not in the first 8). The three sheet misses are `fact-sri-4729`, `fact-sri-1733`, and `compare-sri-different-holding`: the router sent those risk-indicator questions to search. No query, filter, or golden-id change. The local page marks the quote in the passage. The public page does not, because it was not deployed.
 
 ## Corpus measurements
 
@@ -30,11 +32,11 @@ Build a Python RAG service on Azure over a small corpus of public fund documents
 
 ## Next action
 
-Do not start M9. Do not deploy again unless the human asks. The live sheet still has 22 rows and every `ongoing_charge` cell is `not_extracted`. The manual workflow still needs the model endpoints as GitHub secrets. The live numbers in the README are from a local `uv run eval-run`.
+Do not start M9. Do not deploy again unless the human asks. The marked passage is on the local page only. The manual workflow still needs the model endpoints as GitHub secrets.
 
 ## Blockers
 
-Do not create Azure AI Search Basic or Azure Container Registry. `sheet.json` is in the blob and its cost cells are `not_extracted`. Pull-request pytest still fails on GitHub because `data/pdfs/` is gitignored and the workflow does not download the PDFs.
+Do not create Azure AI Search Basic or Azure Container Registry. `.github/workflows/tests.yml` downloads the PDFs before pytest. A push to `main` deploys the container app unless the commit message contains `[skip ci]`.
 
 ## Done when this project is interview-ready
 

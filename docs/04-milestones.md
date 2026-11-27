@@ -78,6 +78,22 @@ Check: the tool names and schemas match the functions the API uses. No second im
 
 Check: a new reader can run the demo from the README without this `docs/` folder.
 
+## After M8 — Cited sheet columns
+
+Done 2026-11-26. Results are in `STATUS.md`. Do not redo this milestone. Do not start M9.
+
+The ongoing-cost cells were `not_extracted` because a model quote that contains the percent and the euro illustration fails the one-figure check. The regulated columns are filled with grammars. `domain/verify.py` stays the gate and does not learn labels.
+
+- `domain/kid_cost.py` reads the `costs` section. The quote is the single annual percent: `N %` or `N prosenttia`, including the hyphen break in `toimintamaksut`. The euro illustration and the transaction-cost percent are not the quote. Two qualifying figures in one file fail the run.
+- `uv run ingest sheet` parses the local KIDs, does not call the model, and replaces `ongoing_charge` on the blob sheet. A miss, an uncovered ISIN, or two files that disagree exits and leaves the previous `sheet.json`. `ingest index` still calls the model, then a `stated` grammar cell replaces that column.
+- Tests: four string fixtures, plus all 12 manifest KIDs against `ROWS` in `tests/eval/test_golden.py`. The pull-request workflow downloads the PDFs first. The binaries stay gitignored.
+- The score reports `sheet`, `retrieve`, and `refuse` separately. Re-run the live eval after the cost column is `stated`. Keep the 2026-11-26 run, 9 of 29, labeled as the empty-cell run.
+- Then the same grammar shape for the risk indicator (`määritetty N`) and the recommended holding sentence, including `3 kuukautta` stored as printed. Entry and exit stay as stored.
+- A `stated` cell may add `passage`, the collapsed chunk text. The quote stays the one-figure token. `not_extracted` stays `{ "state": "…" }` only. The page marks the quote in that passage. The follow-up box stays on the quarterly review. Deploy the page only if the human asks.
+- Name the retrieval misses in `STATUS.md`. A code change is allowed only for a bug in the query, the filter, or the golden id. Do not retune chunk sizes or add a ranker or an Azure resource.
+
+Check: the blob sheet has 22 rows, and `ongoing_charge`, `sri`, and `holding_period` are `stated` for every row those grammars cover. Public `GET /sheet` shows the cost figures without a new image. The README shows the empty-cell eval and the later run split by path. The marked passage is on the local page, and on the public page only after a deploy the human asked for.
+
 ## M9 — Later, only after M8
 
 Databricks is optional and only if the human asks. The smallest honest version is: parsed document metadata and eval metrics land in a Delta table, and the same MLflow experiment is viewed there. Do not start M9 to decorate the README.

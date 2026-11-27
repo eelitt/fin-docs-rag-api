@@ -99,3 +99,7 @@ def test_hit_rate_uses_the_first_k_retrieved_ids():
     report = summarize(items, answers, {"funds": []}, k=1, version="1")
     assert report["hit_rate_at_k"] == 0.5
     assert report["failures"] == []
+    assert report["retrieval_misses"] == ["miss"]
+    assert report["by_path"]["retrieve"] == {"items": 2, "passed": 2}
+    assert report["by_path"]["sheet"] == {"items": 0, "passed": 0}
+    assert report["by_path"]["refuse"] == {"items": 0, "passed": 0}

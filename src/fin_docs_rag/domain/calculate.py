@@ -42,6 +42,8 @@ def lookup_sentence(isin: str, field: str, cell: SheetCell, holding: SheetCell |
     if field not in COST_COLUMNS:
         return sentence
     if holding is not None and holding.state == "stated" and holding.quote:
+        if holding.quote.endswith("."):
+            return f"{sentence} The figure assumes {holding.quote}"
         return f"{sentence} The figure assumes {holding.quote}."
     return f"{sentence} The holding period is not stated."
 
@@ -119,5 +121,7 @@ def _gap(isin: str, cell: SheetCell | None, field: str) -> str | None:
 
 def _period(isin: str, holding: SheetCell | None) -> str:
     if holding is not None and holding.state == "stated" and holding.quote:
+        if holding.quote.endswith("."):
+            return f"The figure for {isin} assumes {holding.quote}"
         return f"The figure for {isin} assumes {holding.quote}."
     return f"The figure for {isin} assumes a holding period that is not stated."
